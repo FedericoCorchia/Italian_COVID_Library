@@ -4,8 +4,8 @@ import io
 
 class COVIDDataSource:
     def __init__(self, url: str):
-        self._url = url
-    _url = ""
+        self.url = url
+
 
 vaccine_age_ranges_summary_latest = COVIDDataSource("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
 vaccine_deliveries_latest = COVIDDataSource("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv")
@@ -26,10 +26,10 @@ region_cases = COVIDDataSource("https://raw.githubusercontent.com/pcm-dpc/COVID-
 over80 = COVIDDataSource("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv")
 istat_region_data = COVIDDataSource("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv")
 
-def get(url):
+def get(covid_data_source):
     """Docstring to be added when function is completed."""
     try:
-        downloaded_content = requests.get(url).content
+        downloaded_content = requests.get(covid_data_source.url).content
         dataframe = pd.read_csv(io.StringIO(downloaded_content.decode('utf-8')))
         return dataframe
     except requests.exceptions.MissingSchema:
@@ -37,5 +37,5 @@ def get(url):
     except requests.exceptions.ConnectionError:
         print("Failure to connect to URL")
 
-        
+
 
