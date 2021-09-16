@@ -12,3 +12,6 @@ elif working_dir == "tests":
 
 def test_wrong_url():
     test_dataframe = get("wrong_url")
+
+def test_wrong_url_2():
+    test_dataframe = get("http://fakeurl")
