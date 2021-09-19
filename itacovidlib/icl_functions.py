@@ -107,7 +107,7 @@ def get_eligible():
     age_group : str
         Age group
     population : int
-        Total population per given age_group"""
+        Total population per given age group"""
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv").rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
 
@@ -393,4 +393,51 @@ def get(url):
         print("ERROR Connection failure")
 
 
+def quick_total_administered_doses():
+    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
+    
+    Returns the amount of all administered doses ever.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    int
+        Integer with the amount of all administered doses ever
+    
+    See Also
+    --------
+    get_vaccine_summary_latest : also includes regional data"""
+    
+    source_dataframe = get_vaccine_summary_latest()
+    # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
+    return int(source_dataframe["administered_doses"].sum())
 
+def quick_total_vaccinated():
+    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
+    
+    Returns the number of individuals who have completed the vaccination cycle (with double dose for Pfizer/Biontech, Moderna and AstraZeneca, with single dose for Johnson&Johnson, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    int
+        Integer with the amount of individuals who have completed the vaccination cycle"""
+    
+    #source_dataframe = get_vaccine_admin_latest()
+    # acquired dataframe lists all second doses and previously infected individuals completing the cycle with one single dose per day. Sum is performed on all daily values.
+    #return int(source_dataframe["second_dose"].sum()+source_dataframe["previously_infected"].sum())
+    pass
