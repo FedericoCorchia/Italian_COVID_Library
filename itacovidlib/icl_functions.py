@@ -2,30 +2,330 @@ import pandas as pd
 import requests
 import io
 
+# ====================================================================================
+# FOR ALL get_<resource_name>() FUNCTIONS
+#
+# .rename(columns={...}) translates column names (originally in Italian) into English.
+# ====================================================================================
 
-
-def get_vaccine_ages_sum_latest():
+def get_vaccine_ages_summary_latest():
+    """Returns dataframe about COVID-19 vaccine administrations per age group in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    age_group : str
+        Age groups
+    total : int
+        Total of administered vaccines
+    males : int
+        Total of male persons to which vaccine has been administered
+    females : int
+        Total of female persons to which vaccine has been administered
+    first_dose : int
+        Number of first doses
+    second_dose : int
+        Number of second doses
+    previously_infected : int
+        Number of vaccine administrations to individuals infected between 3 and 6 months before, as such completing the vaccination cycle with a single dose
+    last_update : str
+        Date of last update"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv").rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","ultimo_aggiornamento":"last_update"})
 
 def get_vaccine_deliveries_latest():
-    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv").rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+    """Returns dataframe about COVID-19 vaccine deliveries in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    region_code : str
+        Code of delivery region
+    manufacturer : str
+        Vaccine manufacturer name
+    date_of_delivery : datetime
+        Date of delivery
+    number_of_doses : int
+        Number of delivered doses on date date_of_delivery
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : int
+        ISTAT region code
+    region : str
+        Official region name"""
+    
+    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv").rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_eligible():
-    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv").rename(columns={"area":"region_code","nome_area":"region_name","fascia_anagrafica":"age_group","totale_popolazione":"population"})
+    """Returns dataframe about eligible persons for COVID-19 vaccine administration in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    region_code : str
+        Code of delivery region
+    region : str
+        Official region name
+    age_group : str
+        Age group
+    population : int
+        Total population per given age_group"""
+    
+    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv").rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
 
 def get_admin_sites_latest():
+    """Returns dataframe about COVID-19 vaccine administrations points in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    region_code : str
+        Region code
+    province : str
+        Province
+    municipality : str
+        Municipality
+    place : str
+        Name of place of administration
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : str
+        ISTAT region code
+    region : str
+        Official region name"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.csv").rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_admin_sites_types():
+    """Returns dataframe on types of COVID-19 vaccine administration points in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+    Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    region_code : str
+        Region code
+    place : str
+        Name of place of administration
+    type : str
+        Type of administration place: OSPEDALIERO (hospital) or TERRITORIALE (local)
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : str
+        ISTAT region code
+    region : str
+        Official region name"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-tipologia.csv").rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_admin_latest():
+    """Returns dataframe on COVID-19 vaccine administration in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    -------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    date : datetime
+        Date of administration
+    Manufacturer : str
+        Vaccine manufacturer name
+    region_code : str
+        Region code
+    age_group : str
+        Age group
+    males : int
+        Number of male individuals who have been given the vaccine
+    females : int
+        Number of female individuals who have been given the vaccine
+    first_dose : int
+        Number of first doses
+    second_dose : int
+        Number of second doses
+    previously_infected : int
+        Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : int
+        ISTAT region code
+    region : str
+        Official region name
+    
+    See Also
+    --------
+    get_vaccine_admin_summary_latest : a concise version (summary) of this function"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv").rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_vaccine_admin_sum_latest():
+def get_vaccine_admin_summary_latest():
+    """Returns dataframe about COVID-19 vaccine administration in Italy (summary version)
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    date : datetime
+        Date of administration
+    region_code : str
+        Region code
+    total : int
+        Total amount of doses
+    males : int
+        Number of male individuals who have been given the vaccine
+    females : int
+        Number of female individuals who have been given the vaccine
+    first_dose : int
+        Number of first doses
+    second_dose : int
+        Number of second doses
+    previously_infected : int
+        Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : int
+        ISTAT region code
+    region : str
+        Official region name
+    
+    See Also
+    --------
+    get_vaccine_admin_latest : a complete version of this function with more data"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv").rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_vaccine_sum_latest():
+def get_vaccine_summary_latest():
+    """Returns dataframe with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with requested data.
+    
+    Dataframe Columns
+    -----------------
+    region_code : str
+        Region code
+    administered_doses : int
+        Number of administered doses
+    delivered_doses : int
+        Number of delivered doses
+    administration_percent : number
+        Percentage of administered doses over delivered doses
+    last_update : datetime
+        Date and time of last update
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    ISTAT_region_code : int
+        ISTAT region code
+    region : str
+        Official region name
+    
+    See Also
+    --------
+    get_vaccine_deliveries_latest : more info on COVID-19 vaccine deliveries
+    get_vaccine_admin_summary_latest : more info on COVID-19 vaccine administrations (concise version)
+    get_vaccine_admin_latest : more info on COVID-19 vaccine administrations (complete version)"""
+    
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv").rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_national_trend():
@@ -61,13 +361,34 @@ def get_istat_region_data():
 
 
 def get(url):
-    """Docstring to be added when function is completed."""
+    """Returns a dataframe from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name>() functions.
+    
+    Parameters
+    ----------
+    url : str
+       URL at which the required .csv file is.
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+       Pandas dataframe with the data from the .csv file at which url points.
+
+    See Also
+    --------
+    Any function whose name begins with get_ : uses get(url)"""
+
     try:
         downloaded_content = requests.get(url).content
         dataframe = pd.read_csv(io.StringIO(downloaded_content.decode('utf-8')))
         return dataframe
+    # handles the case when string url has not the syntax of a real URL
     except requests.exceptions.MissingSchema:
         print("ERROR Unvalid URL provided")
+    # handles connection issues (both lack of Internet connection or URL leading to no website)
     except requests.exceptions.ConnectionError:
         print("ERROR Connection failure")
 
