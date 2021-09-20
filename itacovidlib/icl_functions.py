@@ -441,3 +441,48 @@ def quick_total_vaccinated():
     # acquired dataframe lists all second doses and previously infected individuals completing the cycle with one single dose per day. Sum is performed on all daily values.
     #return int(source_dataframe["second_dose"].sum()+source_dataframe["previously_infected"].sum())
     pass
+
+def quick_total_distributed_doses():
+    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
+    
+    Returns the number of all distributed doses ever in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    int
+        Integer with the number of all distributed doses ever"""
+    
+    pass
+
+def quick_total_administration_points():
+    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
+    
+    Returns the number of all vaccine administration points in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    int
+        Integer with the number of all vaccine administration points in Italy
+    
+    See Also
+    --------
+    get_admin_sites_latest : returns specific info on vaccine administration points
+    get_admin_sites_types : returns vaccine administration points types"""
+
+    pass
