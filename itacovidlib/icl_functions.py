@@ -329,9 +329,102 @@ def get_vaccine_summary_latest():
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv").rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_national_trend():
+    """Returns dataframe about COVID-19 pandemic situation in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Dataframe about COVID-19 pandemic situation in Italy
+    
+    Dataframe Columns
+    -----------------
+    date : str
+        Date
+    country : str
+        Country
+    hospitalized_with_symptoms : int
+        Number of hospitalized individuals with COVID-19 symptoms
+    intensive_care : int
+        Number of individuals in intensive care units
+    hospitalized : int
+        Number of hospitalized individuals, either with symptoms or in intensive care unit
+    isolation : int
+        Number of people placed into isolation
+    cases : int
+        Number of COVID-19 cases
+    cases_variation : int
+        Variation in the number of COVID-19 cases with respect to the previous day
+    new_cases : int
+        Number of new individuals diagnosed with COVID-19
+    recovered_released : int
+        Number of individuals released from hospital after recovery
+    deaths : int
+        Number of individuals died following COVID-19 infection
+    cases_from_clinical_suspects : int
+        Number of positive cases found after report of COVID-19-like symptoms
+    cases_from_screening : int
+        Number of positive cases found after screening (e.g. close contacts of a positive case)
+    cumulative_cases : int
+        Total number of COVID-19 cases since the beginning of the pandemic
+    swabs : int
+        Number of swabs performed
+    tested : int
+        Number of tested individuals
+    notes : str
+        Notes
+    intensive_care_in : int
+        Number of new accesses to intensive care units
+    test_notes : str
+        Notes on testing
+    case_notes : str
+        Notes on COVID-19 cases
+    molecular_test_cases : int
+        Number of COVID-19 cases detected through molecular tests
+    antigen_test_cases : int
+        Number of COVID-19 cases detected through antigen (so-called rapid) tests
+    molecular_tests : int
+        Total number of molecular tests performed
+    antigen_tests : int
+        Total number of antigen (so-called rapid) tests performed
+    
+    See Also
+    --------
+    get_national_trend_latest : only returns data referred to the current day"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv").rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_national_trend_latest():
+    """Returns dataframe about COVID-19 pandemic situation in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_national_trend().
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe about COVID-19 pandemic situation in Italy on the current day (i.e. the last update).
+    
+    Dataframe Columns
+    -----------------
+    Please see documentation of get_national_trend()
+    
+    See Also
+    --------
+    get_national_trend : also includes the situation on all days since the beginning of the pandemic"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv").rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_equip_contracts():
@@ -341,15 +434,193 @@ def get_equip_contracts_payments():
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv").rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_province_cases():
+    """Returns dataframe about COVID-19 cases per province in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Dataframe about COVID-19 cases per province
+    
+    Dataframe Columns
+    -----------------
+    date : str
+        Date
+    country : str
+        Country
+    region_code : int
+        Region code number
+    region : str
+        Official region name
+    province_code : int
+        Province code number
+    province : str
+        Province
+    province_abbreviation : str
+        Province two-letter abbreviation
+    lat : numpy.float64
+        Latitude
+    long : numpy.float64
+        Longitude
+    cumulative_cases : int
+        Total number of COVID-19 cases since the beginning of the pandemic
+    notes : str
+        Notes
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    NUTS3_code : str
+        European classification of territorial units NUTS: level NUTS3
+    
+    See Also
+    --------
+    get_province_cases_latest : only returns data referred to the current day"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv").rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_province_cases_latest():
+    """Returns dataframe about COVID-19 cases per province in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_province_cases().
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Dataframe about COVID-19 cases per province on the current day
+    
+    Dataframe Columns
+    -----------------
+    Please see get_province_cases() documentation
+    
+    See Also
+    --------
+    get_province_cases : also includes the situation on all days since the beginning of the pandemic"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv").rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_region_cases_latest():
+    """Returns dataframe about COVID-19 cases per region in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_region_cases().
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe about COVID-19 cases per region on the current day
+    
+    Dataframe Columns
+    -----------------
+    Please see documentation of get_region_cases()
+    
+    See Also
+    --------
+    get_region_cases : also includes the situation on all days since the beginning of the pandemic"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv").rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_region_cases():
+    """Returns dataframe about COVID-19 cases per region in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe about COVID-19 cases per region
+    
+    Dataframe Columns
+    -----------------
+    date : str
+        Date
+    country : str
+        Country
+    region_code : int
+        Region code number
+    region : str
+        Official region name
+    lat : numpy.float64
+        Latitude
+    long : numpy.float64
+        Longitude
+    hospitalized_with_symptoms : int
+        Number of hospitalized individuals with COVID-19 symptoms
+    intensive_care : int
+        Number of individuals in intensive care units
+    hospitalized : int
+        Number of hospitalized individuals, either with symptoms or in intensive care unit
+    isolation : int
+        Number of people placed into isolation
+    cases : int
+        Number of COVID-19 cases
+    cases_variation : int
+        Variation in the number of COVID-19 cases with respect to the previous day
+    new_cases : int
+        Number of new individuals diagnosed with COVID-19
+    recovered_released : int
+        Number of individuals released from hospital after recovery
+    deaths : int
+        Number of individuals died following COVID-19 infection
+    cases_from_clinical_suspects : int
+        Number of positive cases found after report of COVID-19-like symptoms
+    cases_from_screening : int
+        Number of positive cases found after screening (e.g. close contacts of a positive case)
+    cumulative_cases : int
+        Total number of COVID-19 cases since the beginning of the pandemic
+    swabs : int
+        Number of swabs performed
+    tested : int
+        Number of tested individuals
+    notes : str
+        Notes
+    intensive_care_in : int
+        Number of new accesses to intensive care units
+    test_notes : str
+        Notes on testing
+    case_notes : str
+        Notes on COVID-19 cases
+    molecular_test_cases : int
+        Number of COVID-19 cases detected through molecular tests
+    antigen_test_cases : int
+        Number of COVID-19 cases detected through antigen (so-called rapid) tests
+    molecular_tests : int
+        Total number of molecular tests performed
+    antigen_tests : int
+        Total number of antigen (so-called rapid) tests performed
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    
+    See Also
+    --------
+    get_region_cases_latest : only returns data referred to the current day"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_over_80():
