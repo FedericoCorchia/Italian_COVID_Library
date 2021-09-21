@@ -40,10 +40,12 @@ def get_vaccine_ages_summary_latest():
         Number of second doses
     previously_infected : int
         Number of vaccine administrations to individuals infected between 3 and 6 months before, as such completing the vaccination cycle with a single dose
+    extra_dose : int
+        Number of extra doses administered to individuals requiring it
     last_update : str
         Date of last update"""
     
-    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv").rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","ultimo_aggiornamento":"last_update"})
+    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv").rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"})
 
 def get_vaccine_deliveries_latest():
     """Returns dataframe about COVID-19 vaccine deliveries in Italy.
@@ -219,6 +221,8 @@ def get_vaccine_admin_latest():
         Number of second doses
     previously_infected : int
         Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+    extra_dose : int
+        Number of extra doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
@@ -232,7 +236,7 @@ def get_vaccine_admin_latest():
     --------
     get_vaccine_admin_summary_latest : a concise version (summary) of this function"""
     
-    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv").rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv").rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_admin_summary_latest():
     """Returns dataframe about COVID-19 vaccine administration in Italy (summary version)
@@ -268,6 +272,8 @@ def get_vaccine_admin_summary_latest():
         Number of second doses
     previously_infected : int
         Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+    extra_dose : int
+        Number of extra doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
@@ -281,7 +287,7 @@ def get_vaccine_admin_summary_latest():
     --------
     get_vaccine_admin_latest : a complete version of this function with more data"""
     
-    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv").rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+    return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv").rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_summary_latest():
     """Returns dataframe with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
