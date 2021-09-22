@@ -434,9 +434,119 @@ def get_national_trend_latest():
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv").rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_equip_contracts():
+    """Returns data about COVID-19 pandemic equipment contracts for Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with data about COVID-19 pandemic equipment contracts
+    
+    Dataframe Columns
+    -----------------
+    manufacturer : str
+        Equipment manufacturer name
+    country : str
+        Country
+    product_group : str
+        Official product group
+    article_subgroup : str
+        Official article subgroup
+    category : str
+        Equipment category
+    subcategory : str
+        Equipment subcategory
+    equipment_kind : str
+        Equipment kind
+    equipment : str
+        Equipment name
+    negotiation_protocol : str
+        Name of negotiation protocol
+    negotiation_date : str
+        Date of negotiation
+    negotiation_file : str
+        Negotiation file link
+    errata : str
+        Errata corrige
+    errata_protocol : str
+        Protocol errata corrige
+    errata_date : str
+        Date errata corrige
+    errata_file : str
+        File errata corrige
+    tender_id_type : str
+        Tender identification code type
+    tender_id : str
+        Tender identification code
+    quantity : int
+        Item quantity
+    unit_price : numpy.float64
+        Price per unit
+    total_price : numpy.float64
+        Total price
+    agreement_state : str
+        State of agreement
+    ceded : str
+        State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
+    notes : str
+        Notes
+    update_date : str
+        Date of update
+    
+    See Also
+    --------
+    get_equip_contracts_payments : data about payments for COVID-19 pandemic equipment"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv").rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"cig_type","cig":"cig","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_equip_contracts_payments():
+    """Returns data about payments for COVID-19 equipment in Italy, as established by contracts.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe about payments for COVID-19 equipment
+    
+    Dataframe Columns
+    -----------------
+    negotiation_protocol : str
+        Name of negotiation protocol
+    total_equipment : numpy.float64
+        Total amount per given equipment
+    total_paid : numpy.float64
+        Total paid
+    donations : numpy.float64
+        Amount of donations
+    other_funds : numpy.float64
+        Amount of other funds used for that payment
+    payment_fund : numpy.float64
+        Amount of payment fund used for that payment
+    ceded : str
+        State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
+    notes : str
+        Notes
+    update_date : str
+        Date of update
+    
+    See Also
+    --------
+    get_equip_contracts : data about COVID-19 equipment contracts"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv").rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_province_cases():
@@ -630,9 +740,87 @@ def get_region_cases():
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv").rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_over_80():
-    return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv").rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_description","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
+    """Returns data on over 80 individuals in Italy
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with data on over 80 individuals
+    
+    Dataframe Columns
+    -----------------
+    region_code : int
+        Region code number
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS1_description : str
+        Description of level NUTS1 of the European classification of territorial units NUTS
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    region : str
+        Official region name
+    age_range : str
+        Age range
+    males : int
+        Number of male individuals
+    females : int
+        Number of female individuals
+    total : int
+        Total number of over 80 individuals"""
+    
+    return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv").rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
 
 def get_istat_region_data():
+    """Returns data about Italian regions from ISTAT (Italian National Institute of Statistics).
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas dataframe with data about Italian regions from ISTAT
+    
+    Dataframe Columns
+    -----------------
+    region_code : int
+        Region code number
+    NUTS1_code : str
+        European classification of territorial units NUTS: level NUTS1
+    NUTS1_description : str
+        Description of level NUTS1 of the European classification of territorial units NUTS
+    NUTS2_code : str
+        European classification of territorial units NUTS: level NUTS2
+    region : str
+        Official region name
+    region_abbreviation: str
+        Region name abbreviation
+    lat : numpy.float64
+        Latitude
+    long : numpy.float64
+        Longitude
+    age_range : str
+        Age range
+    males : int
+        Number of male individuals
+    females : int
+        Number of female individuals
+    total : int
+        Total number of individuals"""
+    
     return get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv").rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","sigla_regione":"region_abbreviation","latitudine_regione":"lat","longitudine_regione":"long","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
 
 
