@@ -8,7 +8,7 @@ import io
 # .rename(columns={...}) translates column names (originally in Italian) into English.
 # ====================================================================================
 
-def get_vaccine_ages_summary_latest():
+def get_vaccine_ages():
     """Returns dataframe about COVID-19 vaccine administrations per age group in Italy.
     
     Parameters
@@ -47,7 +47,7 @@ def get_vaccine_ages_summary_latest():
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv").rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"})
 
-def get_vaccine_deliveries_latest():
+def get_vaccine_deliveries():
     """Returns dataframe about COVID-19 vaccine deliveries in Italy.
     
     Parameters
@@ -113,7 +113,7 @@ def get_eligible():
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv").rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
 
-def get_admin_sites_latest():
+def get_admin_sites():
     """Returns dataframe about COVID-19 vaccine administrations points in Italy.
     
     Parameters
@@ -185,7 +185,7 @@ def get_admin_sites_types():
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-tipologia.csv").rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_vaccine_admin_latest():
+def get_vaccine_admin():
     """Returns dataframe on COVID-19 vaccine administration in Italy.
     
     Parameters
@@ -234,11 +234,11 @@ def get_vaccine_admin_latest():
     
     See Also
     --------
-    get_vaccine_admin_summary_latest : a concise version (summary) of this function"""
+    get_vaccine_admin_summary : a concise version (summary) of this function"""
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv").rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_vaccine_admin_summary_latest():
+def get_vaccine_admin_summary():
     """Returns dataframe about COVID-19 vaccine administration in Italy (summary version)
     
     Parameters
@@ -285,11 +285,11 @@ def get_vaccine_admin_summary_latest():
     
     See Also
     --------
-    get_vaccine_admin_latest : a complete version of this function with more data"""
+    get_vaccine_admin : a complete version of this function with more data"""
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv").rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_vaccine_summary_latest():
+def get_vaccine_summary():
     """Returns dataframe with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
     
     Parameters
@@ -328,9 +328,9 @@ def get_vaccine_summary_latest():
     
     See Also
     --------
-    get_vaccine_deliveries_latest : more info on COVID-19 vaccine deliveries
-    get_vaccine_admin_summary_latest : more info on COVID-19 vaccine administrations (concise version)
-    get_vaccine_admin_latest : more info on COVID-19 vaccine administrations (complete version)"""
+    get_vaccine_deliveries : more info on COVID-19 vaccine deliveries
+    get_vaccine_admin_summary : more info on COVID-19 vaccine administrations (concise version)
+    get_vaccine_admin : more info on COVID-19 vaccine administrations (complete version)"""
     
     return get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv").rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
@@ -878,7 +878,7 @@ def quick_total_administered_doses():
     
     See Also
     --------
-    get_vaccine_summary_latest : also includes regional data"""
+    get_vaccine_summary : also includes regional data"""
     
     source_dataframe = get_vaccine_summary_latest()
     # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
@@ -947,7 +947,7 @@ def quick_total_administration_points():
     
     See Also
     --------
-    get_admin_sites_latest : returns specific info on vaccine administration points
+    get_admin_sites : returns specific info on vaccine administration points
     get_admin_sites_types : returns vaccine administration points types"""
 
     pass
