@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 import io
+import numpy as np
 
 # ====================================================================================
 # FOR ALL get_<resource_name>() FUNCTIONS
@@ -880,7 +881,7 @@ def quick_total_administered_doses():
     --------
     get_vaccine_summary : also includes regional data"""
     
-    source_dataframe = get_vaccine_summary_latest()
+    source_dataframe = get_vaccine_summary()
     # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
     return int(source_dataframe["administered_doses"].sum())
 
@@ -927,7 +928,7 @@ def quick_total_distributed_doses():
     
     pass
 
-def quick_total_administration_points():
+def quick_total_admin_points():
     """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
     
     Returns the number of all vaccine administration points in Italy.
@@ -950,4 +951,33 @@ def quick_total_administration_points():
     get_admin_sites : returns specific info on vaccine administration points
     get_admin_sites_types : returns vaccine administration points types"""
 
-    pass
+    # get_admin_sites_types() returns all administration points, one per row
+    return len(get_admin_sites_types().index)
+
+def tell_manufacturer_delivered_doses(manufacturer):
+    """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy.
+    
+    Parameters
+    ----------
+    manufacturer : str
+        Vaccine manufacturer name. ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen"
+    
+    Raises
+    ------
+    None
+    
+    Returns
+    -------
+    numpy.int64
+        Number of delivered vaccine doses from chosen manufacturer
+    
+    See Also
+    --------
+    get_vaccine_deliveries : full data about vaccine deliveries per manufacturer"""
+
+    # get_vaccine_deliveries() returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result
+    manufacturer_delivered_doses = np.int64(get_vaccine_deliveries()[get_vaccine_deliveries()["manufacturer"]==manufacturer].sum()["number_of_doses"])
+    if manufacturer_delivered_doses == 0:
+        print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+    else:
+        return manufacturer_delivered_doses
