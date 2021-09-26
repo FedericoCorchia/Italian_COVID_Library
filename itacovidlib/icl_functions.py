@@ -883,12 +883,16 @@ def tell_total_administered_doses():
     # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
     return int(source_dataframe["administered_doses"].sum())
 
-def tell_total_vaccinated():
-    """Returns the number of individuals who have completed the vaccination cycle (with double dose for Pfizer/Biontech, Moderna and AstraZeneca, with single dose for Johnson&Johnson, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination.
+def tell_total_vaccinated(dose_number):
+    """Depending on the int value provided as dose_number:
+    dose_number = 1: returns the number of individuals who have been injected at least one vaccine dose in Italy (independently of it being enough for vaccination cycle completion, as is the case with Janssen vaccine or for individuals with recent COVID-19 injection, for whom only one dose is required;
+    dose_number = 2: returns the number of individuals who have completed the vaccination cycle in Italy (with double dose for Pfizer/BioNTech, Moderna and Vaxzevria (AstraZeneca), with single dose for Janssen, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination;
+    dose_number = 3: returns the number of individuals who have been injected an extra dose of vaccine in Italy, being eligible for it depending on their medical condition (commonly referred to as "third dose" in media).
     
     Parameters
     ----------
-    None
+    dose_number : int
+        Dose number of interest. See above for the meaning of dose_number = 1, 2 or 3. Other int values yield an error.
     
     Raises
     ------
@@ -896,31 +900,24 @@ def tell_total_vaccinated():
     
     Returns
     -------
-    int
-        Integer with the amount of individuals who have completed the vaccination cycle"""
+    numpy.int64
+        NumPy integer (see above for its meaning, depending on dose_number being equal to 1, 2 or 3).
     
-    #source_dataframe = get_vaccine_admin_latest()
-    # acquired dataframe lists all second doses and previously infected individuals completing the cycle with one single dose per day. Sum is performed on all daily values.
-    #return int(source_dataframe["second_dose"].sum()+source_dataframe["previously_infected"].sum())
-    pass
+    See Also
+    --------
+    get_vaccine_admin : full data about vaccine administration in Italy"""
 
-def tell_total_distributed_doses():
-    """Returns the number of all distributed doses ever in Italy.
-    
-    Parameters
-    ----------
-    None
-    
-    Raises
-    ------
-    None
-    
-    Returns
-    -------
-    int
-        Integer with the number of all distributed doses ever"""
-    
-    pass
+    vaccine_admin = get_vaccine_admin()
+    if dose_number == 1:
+        # Previously infected individuals data are also added, since the dataframe returned by get_vaccine_admin() keeps them separate from first doses count
+        return vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+    elif dose_number == 2:
+        # For vaccines requiring two doses data on second doses are taken, for vaccines requiring one single dose data on first doses are taken, for all vaccines data on previously infected individuals, completing the vaccination cycle with one single dose, are also taken, since their data are kept separate from first and second doses data
+        return vaccine_admin[vaccine_admin["manufacturer"]!="Janssen"].sum()["second_dose"]+vaccine_admin[vaccine_admin["manufacturer"]=="Janssen"].sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+    elif dose_number == 3:
+        return vaccine_admin.sum()["extra_dose"]
+    else:
+        print("ERROR Unvalid number code. Please see documentation for help on possible options.")
 
 def tell_total_admin_points():
     """Returns the number of all vaccine administration points in Italy.
@@ -947,12 +944,12 @@ def tell_total_admin_points():
     return len(get_admin_sites_types().index)
 
 def tell_manufacturer_delivered_doses(manufacturer):
-    """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy.
+    """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy. If string "all" is provided as parameter, it returns the number of delivered vaccine doses from all manufacturers.
     
     Parameters
     ----------
     manufacturer : str
-        Vaccine manufacturer name. ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen"
+        Vaccine manufacturer name or str "all". ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen". Str "all" triggers return of number of delivered doses from all manufacturers.
     
     Raises
     ------
@@ -961,15 +958,19 @@ def tell_manufacturer_delivered_doses(manufacturer):
     Returns
     -------
     numpy.int64
-        Number of delivered vaccine doses from chosen manufacturer
+        Number of delivered vaccine doses from chosen manufacturer or all manufacturers, according to parameter
     
     See Also
     --------
     get_vaccine_deliveries : full data about vaccine deliveries per manufacturer"""
 
-    # get_vaccine_deliveries() returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result
-    manufacturer_delivered_doses = np.int64(get_vaccine_deliveries()[get_vaccine_deliveries()["manufacturer"]==manufacturer].sum()["number_of_doses"])
-    if manufacturer_delivered_doses == 0:
-        print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+    # get_vaccine_deliveries() returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result. If the str "all" is provided, the function returns all delivered doses for all manufacturers.
+    if manufacturer=="all":
+        all_delivered_doses = np.int64(get_vaccine_deliveries().sum()["number_of_doses"])
+        return all_delivered_doses
     else:
-        return manufacturer_delivered_doses
+        manufacturer_delivered_doses = np.int64(get_vaccine_deliveries()[get_vaccine_deliveries()["manufacturer"]==manufacturer].sum()["number_of_doses"])
+        if manufacturer_delivered_doses == 0:
+            print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+        else:
+            return manufacturer_delivered_doses
