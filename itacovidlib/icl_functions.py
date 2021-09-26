@@ -859,10 +859,8 @@ def get(url):
         print("ERROR Connection failure")
 
 
-def quick_total_administered_doses():
-    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
-    
-    Returns the amount of all administered doses ever.
+def tell_total_administered_doses():
+    """Returns the amount of all administered doses ever.
     
     Parameters
     ----------
@@ -885,10 +883,8 @@ def quick_total_administered_doses():
     # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
     return int(source_dataframe["administered_doses"].sum())
 
-def quick_total_vaccinated():
-    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
-    
-    Returns the number of individuals who have completed the vaccination cycle (with double dose for Pfizer/Biontech, Moderna and AstraZeneca, with single dose for Johnson&Johnson, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination.
+def tell_total_vaccinated():
+    """Returns the number of individuals who have completed the vaccination cycle (with double dose for Pfizer/Biontech, Moderna and AstraZeneca, with single dose for Johnson&Johnson, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination.
     
     Parameters
     ----------
@@ -908,10 +904,8 @@ def quick_total_vaccinated():
     #return int(source_dataframe["second_dose"].sum()+source_dataframe["previously_infected"].sum())
     pass
 
-def quick_total_distributed_doses():
-    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
-    
-    Returns the number of all distributed doses ever in Italy.
+def tell_total_distributed_doses():
+    """Returns the number of all distributed doses ever in Italy.
     
     Parameters
     ----------
@@ -928,10 +922,8 @@ def quick_total_distributed_doses():
     
     pass
 
-def quick_total_admin_points():
-    """PART OF THE QUICK FUNCTIONS - returning quickly values of common interest without having to manually extract them from data
-    
-    Returns the number of all vaccine administration points in Italy.
+def tell_total_admin_points():
+    """Returns the number of all vaccine administration points in Italy.
     
     Parameters
     ----------
