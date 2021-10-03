@@ -1,20 +1,18 @@
 import sys
 
-import os
-working_dir = os.path.basename(os.path.normpath(os.getcwd()))
-
 sys.path.append("../itacovidlib")
-if working_dir == "covid_lib":
-    from itacovidlib.icl_backend import get
-elif working_dir == "tests":
-    sys.path.append("../itacovidlib")
-    from icl_backend import get
+import itacovidlib.icl_backend#, itacovidlib.icl_functions
 
-def test_wrong_url():
-    test_dataframe = get("wrong_url")
+def test_no_Internet_connection():
+    # to be performed under no Internet connection
+    try:
+        itacovidlib.icl_backend.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
+    except itacovidlib.icl_backend.ItaCovidLibConnectionError:
+        print("No Internet connection exception handled successfully.")
 
-def test_wrong_url_2():
-    test_dataframe = get("http://fakeurl")
-
-
-
+#def test_no_Internet_connection_2():
+    # to be performed under no Internet connection. Same test also applies logically to all other get_<resource_name>() functions, since they work in exactly the same way.
+#    try:
+#        itacovidlib.icl_functions.get_vaccine_ages()
+#    except itacovidlib.icl_backend.ItaCovidLibConnectionError:
+#        print("No Internet connection exception handled successfully.")
