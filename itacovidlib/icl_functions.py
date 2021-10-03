@@ -18,7 +18,8 @@ def get_vaccine_ages():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -29,19 +30,19 @@ def get_vaccine_ages():
     -----------------
     age_group : str
         Age groups
-    total : int
+    total : int64
         Total of administered vaccines
-    males : int
+    males : int64
         Total of male persons to which vaccine has been administered
-    females : int
+    females : int64
         Total of female persons to which vaccine has been administered
-    first_dose : int
+    first_dose : int64
         Number of first doses
-    second_dose : int
+    second_dose : int64
         Number of second doses
-    previously_infected : int
+    previously_infected : int64
         Number of vaccine administrations to individuals infected between 3 and 6 months before, as such completing the vaccination cycle with a single dose
-    extra_dose : int
+    extra_dose : int64
         Number of extra doses administered to individuals requiring it
     last_update : str
         Date of last update"""
@@ -59,7 +60,8 @@ def get_vaccine_deliveries():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -74,7 +76,7 @@ def get_vaccine_deliveries():
         Vaccine manufacturer name
     date_of_delivery : datetime
         Date of delivery
-    number_of_doses : int
+    number_of_doses : int64
         Number of delivered doses on date date_of_delivery
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -98,7 +100,8 @@ def get_eligible():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -113,7 +116,7 @@ def get_eligible():
         Official region name
     age_group : str
         Age group
-    population : int
+    population : int64
         Total population per given age group"""
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv")
@@ -129,7 +132,8 @@ def get_admin_sites():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -150,7 +154,7 @@ def get_admin_sites():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : str
+    ISTAT_region_code : int64
         ISTAT region code
     region : str
         Official region name"""
@@ -168,7 +172,8 @@ def get_admin_sites_types():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -187,7 +192,7 @@ def get_admin_sites_types():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : str
+    ISTAT_region_code : int64
         ISTAT region code
     region : str
         Official region name"""
@@ -205,7 +210,8 @@ def get_vaccine_admin():
     
     Raises
     -------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -222,23 +228,23 @@ def get_vaccine_admin():
         Region code
     age_group : str
         Age group
-    males : int
+    males : int64
         Number of male individuals who have been given the vaccine
-    females : int
+    females : int64
         Number of female individuals who have been given the vaccine
-    first_dose : int
+    first_dose : int64
         Number of first doses
-    second_dose : int
+    second_dose : int64
         Number of second doses
-    previously_infected : int
+    previously_infected : int64
         Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
-    extra_dose : int
+    extra_dose : int64
         Number of extra doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int
+    ISTAT_region_code : int64
         ISTAT region code
     region : str
         Official region name
@@ -260,7 +266,8 @@ def get_vaccine_admin_summary():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -273,25 +280,25 @@ def get_vaccine_admin_summary():
         Date of administration
     region_code : str
         Region code
-    total : int
+    total : int64
         Total amount of doses
-    males : int
+    males : int64
         Number of male individuals who have been given the vaccine
-    females : int
+    females : int64
         Number of female individuals who have been given the vaccine
-    first_dose : int
+    first_dose : int64
         Number of first doses
-    second_dose : int
+    second_dose : int64
         Number of second doses
-    previously_infected : int
+    previously_infected : int64
         Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
-    extra_dose : int
+    extra_dose : int64
         Number of extra doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int
+    ISTAT_region_code : int64
         ISTAT region code
     region : str
         Official region name
@@ -313,7 +320,8 @@ def get_vaccine_summary():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -324,11 +332,11 @@ def get_vaccine_summary():
     -----------------
     region_code : str
         Region code
-    administered_doses : int
+    administered_doses : int64
         Number of administered doses
-    delivered_doses : int
+    delivered_doses : int64
         Number of delivered doses
-    administration_percent : number
+    administration_percent : float64
         Percentage of administered doses over delivered doses
     last_update : datetime
         Date and time of last update
@@ -336,7 +344,7 @@ def get_vaccine_summary():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int
+    ISTAT_region_code : int64
         ISTAT region code
     region : str
         Official region name
@@ -360,7 +368,8 @@ def get_national_trend():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -373,49 +382,49 @@ def get_national_trend():
         Date
     country : str
         Country
-    hospitalized_with_symptoms : int
+    hospitalized_with_symptoms : int64
         Number of hospitalized individuals with COVID-19 symptoms
-    intensive_care : int
+    intensive_care : int64
         Number of individuals in intensive care units
-    hospitalized : int
+    hospitalized : int64
         Number of hospitalized individuals, either with symptoms or in intensive care unit
-    isolation : int
+    isolation : int64
         Number of people placed into isolation
-    cases : int
+    cases : int64
         Number of COVID-19 cases
-    cases_variation : int
+    cases_variation : int64
         Variation in the number of COVID-19 cases with respect to the previous day
-    new_cases : int
+    new_cases : int64
         Number of new individuals diagnosed with COVID-19
-    recovered_released : int
+    recovered_released : int64
         Number of individuals released from hospital after recovery
-    deaths : int
+    deaths : int64
         Number of individuals died following COVID-19 infection
-    cases_from_clinical_suspects : int
+    cases_from_clinical_suspects : float64
         Number of positive cases found after report of COVID-19-like symptoms
-    cases_from_screening : int
+    cases_from_screening : float64
         Number of positive cases found after screening (e.g. close contacts of a positive case)
-    cumulative_cases : int
+    cumulative_cases : int64
         Total number of COVID-19 cases since the beginning of the pandemic
-    swabs : int
+    swabs : int64
         Number of swabs performed
-    tested : int
+    tested : float64
         Number of tested individuals
     notes : str
         Notes
-    intensive_care_in : int
+    intensive_care_in : float64
         Number of new accesses to intensive care units
-    test_notes : str
+    test_notes : float64
         Notes on testing
-    case_notes : str
+    case_notes : float64
         Notes on COVID-19 cases
-    molecular_test_cases : int
+    molecular_test_cases : float64
         Number of COVID-19 cases detected through molecular tests
-    antigen_test_cases : int
+    antigen_test_cases : float64
         Number of COVID-19 cases detected through antigen (so-called rapid) tests
-    molecular_tests : int
+    molecular_tests : float64
         Total number of molecular tests performed
-    antigen_tests : int
+    antigen_tests : float64
         Total number of antigen (so-called rapid) tests performed
     
     See Also
@@ -435,7 +444,8 @@ def get_national_trend_latest():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -463,7 +473,8 @@ def get_equip_contracts():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -506,17 +517,17 @@ def get_equip_contracts():
         Tender identification code type
     tender_id : str
         Tender identification code
-    quantity : int
+    quantity : int64
         Item quantity
-    unit_price : numpy.float64
+    unit_price : float64
         Price per unit
-    total_price : numpy.float64
+    total_price : float64
         Total price
     agreement_state : str
         State of agreement
     ceded : str
         State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
-    notes : str
+    notes : float64
         Notes
     update_date : str
         Date of update
@@ -538,7 +549,8 @@ def get_equip_contracts_payments():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -549,19 +561,19 @@ def get_equip_contracts_payments():
     -----------------
     negotiation_protocol : str
         Name of negotiation protocol
-    total_equipment : numpy.float64
+    total_equipment : float64
         Total amount per given equipment
-    total_paid : numpy.float64
+    total_paid : float64
         Total paid
-    donations : numpy.float64
+    donations : float64
         Amount of donations
-    other_funds : numpy.float64
+    other_funds : float64
         Amount of other funds used for that payment
-    payment_fund : numpy.float64
+    payment_fund : float64
         Amount of payment fund used for that payment
     ceded : str
         State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
-    notes : str
+    notes : float64
         Notes
     update_date : str
         Date of update
@@ -583,7 +595,8 @@ def get_province_cases():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -596,21 +609,21 @@ def get_province_cases():
         Date
     country : str
         Country
-    region_code : int
+    region_code : int64
         Region code number
     region : str
         Official region name
-    province_code : int
+    province_code : int64
         Province code number
     province : str
         Province
     province_abbreviation : str
         Province two-letter abbreviation
-    lat : numpy.float64
+    lat : float64
         Latitude
-    long : numpy.float64
+    long : float64
         Longitude
-    cumulative_cases : int
+    cumulative_cases : int64
         Total number of COVID-19 cases since the beginning of the pandemic
     notes : str
         Notes
@@ -638,7 +651,8 @@ def get_province_cases_latest():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -666,7 +680,8 @@ def get_region_cases_latest():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -694,7 +709,8 @@ def get_region_cases():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -707,57 +723,57 @@ def get_region_cases():
         Date
     country : str
         Country
-    region_code : int
+    region_code : int64
         Region code number
     region : str
         Official region name
-    lat : numpy.float64
+    lat : float64
         Latitude
-    long : numpy.float64
+    long : float64
         Longitude
-    hospitalized_with_symptoms : int
+    hospitalized_with_symptoms : int64
         Number of hospitalized individuals with COVID-19 symptoms
-    intensive_care : int
+    intensive_care : int64
         Number of individuals in intensive care units
-    hospitalized : int
+    hospitalized : int64
         Number of hospitalized individuals, either with symptoms or in intensive care unit
-    isolation : int
+    isolation : int64
         Number of people placed into isolation
-    cases : int
+    cases : int64
         Number of COVID-19 cases
-    cases_variation : int
+    cases_variation : int64
         Variation in the number of COVID-19 cases with respect to the previous day
-    new_cases : int
+    new_cases : int64
         Number of new individuals diagnosed with COVID-19
-    recovered_released : int
+    recovered_released : int64
         Number of individuals released from hospital after recovery
-    deaths : int
+    deaths : int64
         Number of individuals died following COVID-19 infection
-    cases_from_clinical_suspects : int
+    cases_from_clinical_suspects : float64
         Number of positive cases found after report of COVID-19-like symptoms
-    cases_from_screening : int
+    cases_from_screening : float64
         Number of positive cases found after screening (e.g. close contacts of a positive case)
-    cumulative_cases : int
+    cumulative_cases : int64
         Total number of COVID-19 cases since the beginning of the pandemic
-    swabs : int
+    swabs : int64
         Number of swabs performed
-    tested : int
+    tested : float64
         Number of tested individuals
     notes : str
         Notes
-    intensive_care_in : int
+    intensive_care_in : float64
         Number of new accesses to intensive care units
     test_notes : str
         Notes on testing
     case_notes : str
         Notes on COVID-19 cases
-    molecular_test_cases : int
+    molecular_test_cases : float64
         Number of COVID-19 cases detected through molecular tests
-    antigen_test_cases : int
+    antigen_test_cases : float64
         Number of COVID-19 cases detected through antigen (so-called rapid) tests
-    molecular_tests : int
+    molecular_tests : float64
         Total number of molecular tests performed
-    antigen_tests : int
+    antigen_tests : float64
         Total number of antigen (so-called rapid) tests performed
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -781,7 +797,8 @@ def get_over_80():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -790,7 +807,7 @@ def get_over_80():
     
     Dataframe Columns
     -----------------
-    region_code : int
+    region_code : int64
         Region code number
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -802,11 +819,11 @@ def get_over_80():
         Official region name
     age_range : str
         Age range
-    males : int
+    males : int64
         Number of male individuals
-    females : int
+    females : int64
         Number of female individuals
-    total : int
+    total : int64
         Total number of over 80 individuals"""
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv")
@@ -822,7 +839,8 @@ def get_istat_region_data():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -831,7 +849,7 @@ def get_istat_region_data():
     
     Dataframe Columns
     -----------------
-    region_code : int
+    region_code : int64
         Region code number
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -843,17 +861,17 @@ def get_istat_region_data():
         Official region name
     region_abbreviation: str
         Region name abbreviation
-    lat : numpy.float64
+    lat : float64
         Latitude
-    long : numpy.float64
+    long : float64
         Longitude
     age_range : str
         Age range
-    males : int
+    males : int64
         Number of male individuals
-    females : int
+    females : int64
         Number of female individuals
-    total : int
+    total : int64
         Total number of individuals"""
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv")
@@ -869,7 +887,8 @@ def tell_total_administered_doses():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -906,7 +925,11 @@ def tell_total_vaccinated(dose_number, option="n"):
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
+    
+    ItaCovidLibArgumentError
+        Raised when improper arguments are passed to the function.
     
     Returns
     -------
@@ -922,49 +945,46 @@ def tell_total_vaccinated(dose_number, option="n"):
     --------
     get_vaccine_admin : full data about vaccine administration in Italy"""
 
-    vaccine_admin = get_vaccine_admin()
-    if vaccine_admin is not None:
-        if dose_number == 1:
-            # Previously infected individuals data are also added, since the dataframe returned by get_vaccine_admin() keeps them separate from first doses count
-            vaccinated = vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
-            if option=="number" or option=="n":
-                return vaccinated
-            elif option=="over12" or option=="o":
-                total_over_12 = get_eligible().sum()["population"]
-                return vaccinated/total_over_12
-            elif option=="population" or option=="p":
-                total_population = get_istat_region_data().sum()["total"]
-                return vaccinated/total_population
+    if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p":
+        raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
+    else:
+        vaccine_admin = get_vaccine_admin()
+        if vaccine_admin is not None:
+            if dose_number == 1:
+                # Previously infected individuals data are also added, since the dataframe returned by get_vaccine_admin() keeps them separate from first doses count
+                vaccinated = vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+                if option=="number" or option=="n":
+                    return vaccinated
+                elif option=="over12" or option=="o":
+                    total_over_12 = get_eligible().sum()["population"]
+                    return vaccinated/total_over_12
+                elif option=="population" or option=="p":
+                    total_population = get_istat_region_data().sum()["total"]
+                    return vaccinated/total_population
+            elif dose_number == 2:
+                # For vaccines requiring two doses data on second doses are taken, for vaccines requiring one single dose data on first doses are taken, for all vaccines data on previously infected individuals, completing the vaccination cycle with one single dose, are also taken, since their data are kept separate from first and second doses data
+                vaccinated = vaccine_admin[vaccine_admin["manufacturer"]!="Janssen"].sum()["second_dose"]+vaccine_admin[vaccine_admin["manufacturer"]=="Janssen"].sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+                if option=="number" or option=="n":
+                    return vaccinated
+                elif option=="over12" or option=="o":
+                    total_over_12 = get_eligible().sum()["population"]
+                    return vaccinated/total_over_12
+                elif option=="population" or option=="p":
+                    total_population = get_istat_region_data().sum()["total"]
+                    return vaccinated/total_population
+            elif dose_number == 3:
+                vaccinated = vaccine_admin.sum()["extra_dose"]
+                if option=="number" or option=="n":
+                    return vaccinated
+                elif option=="over12" or option=="o":
+                    total_over_12 = get_eligible().sum()["population"]
+                    return vaccinated/total_over_12
+                elif option=="population" or option=="p":
+                    total_population = get_istat_region_data().sum()["total"]
+                    return vaccinated/total_population
             else:
-                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
-        elif dose_number == 2:
-            # For vaccines requiring two doses data on second doses are taken, for vaccines requiring one single dose data on first doses are taken, for all vaccines data on previously infected individuals, completing the vaccination cycle with one single dose, are also taken, since their data are kept separate from first and second doses data
-            vaccinated = vaccine_admin[vaccine_admin["manufacturer"]!="Janssen"].sum()["second_dose"]+vaccine_admin[vaccine_admin["manufacturer"]=="Janssen"].sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
-            if option=="number" or option=="n":
-                return vaccinated
-            elif option=="over12" or option=="o":
-                total_over_12 = get_eligible().sum()["population"]
-                return vaccinated/total_over_12
-            elif option=="population" or option=="p":
-                total_population = get_istat_region_data().sum()["total"]
-                return vaccinated/total_population
-            else:
-                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
-        elif dose_number == 3:
-            vaccinated = vaccine_admin.sum()["extra_dose"]
-            if option=="number" or option=="n":
-                return vaccinated
-            elif option=="over12" or option=="o":
-                total_over_12 = get_eligible().sum()["population"]
-                return vaccinated/total_over_12
-            elif option=="population" or option=="p":
-                total_population = get_istat_region_data().sum()["total"]
-                return vaccinated/total_population
-            else:
-                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
-        else:
-            raise icl_b.ItaCovidLibArgumentError("unvalid number code. Please see documentation for help on possible number codes.")
-#            print("ERROR Unvalid number code. Please see documentation for help on possible options.")
+                raise icl_b.ItaCovidLibArgumentError("unvalid number code. Please see documentation for help on possible number codes.")
+
 
 def tell_total_admin_points():
     """Returns the number of all vaccine administration points in Italy.
@@ -975,7 +995,8 @@ def tell_total_admin_points():
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
     
     Returns
     -------
@@ -1002,7 +1023,11 @@ def tell_manufacturer_delivered_doses(manufacturer):
     
     Raises
     ------
-    None
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
+    
+    ItaCovidLibArgumentError
+        Raised when improper arguments are passed to the function.
     
     Returns
     -------
@@ -1023,13 +1048,7 @@ def tell_manufacturer_delivered_doses(manufacturer):
             manufacturer_delivered_doses = np.int64(data[data["manufacturer"]==manufacturer].sum()["number_of_doses"])
             if manufacturer_delivered_doses == 0:
                 raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
-#                print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
             else:
                 return manufacturer_delivered_doses
 
-### TO DO
-# - Turn error messages into exceptions DONE
-# - Percentage option in tell functions DONE
-# - Fix option error in tell_total_vaccinated taking too much time
-# - Fix Raises in docstrings and/or remove None indication which is ambiguous
-# - Fix type int when it should be numpy.int64 in docstrings
+
