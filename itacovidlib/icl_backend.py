@@ -5,6 +5,7 @@ import sys
 
 # errors are shown as clearly coming from Italian COVID Library to distinguish them from the ones raised by other libraries.
 class ItaCovidLibConnectionError(requests.exceptions.ConnectionError): pass
+class ItaCovidLibArgumentError(Exception): pass
 
 def get(url):
     """Returns a dataframe from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name>() functions.
