@@ -885,16 +885,24 @@ def tell_total_administered_doses():
         # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
         return int(data["administered_doses"].sum())
 
-def tell_total_vaccinated(dose_number):
+def tell_total_vaccinated(dose_number, option="n"):
     """Depending on the int value provided as dose_number:
     dose_number = 1: returns the number of individuals who have been injected at least one vaccine dose in Italy (independently of it being enough for vaccination cycle completion, as is the case with Janssen vaccine or for individuals with recent COVID-19 injection, for whom only one dose is required;
     dose_number = 2: returns the number of individuals who have completed the vaccination cycle in Italy (with double dose for Pfizer/BioNTech, Moderna and Vaxzevria (AstraZeneca), with single dose for Janssen, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination;
     dose_number = 3: returns the number of individuals who have been injected an extra dose of vaccine in Italy, being eligible for it depending on their medical condition (commonly referred to as "third dose" in media).
     
+    Result is returned, depending on the str value provided as option:
+    no option or option = "n" or "number": just returns the requested number (default option);
+    option = "o" or "over12": returns the requested number as a fraction of the Italian population aged over 12;
+    option = "p" or "population": returns the requested number as a fraction of the whole Italian population.
+    
     Parameters
     ----------
     dose_number : int
         Dose number of interest. See above for the meaning of dose_number = 1, 2 or 3. Other int values yield an error.
+    
+    option : str
+        Output option. See above for the meaning of the various option codes. Other str values yield an error.
     
     Raises
     ------
@@ -902,25 +910,61 @@ def tell_total_vaccinated(dose_number):
     
     Returns
     -------
+    FOR THE DEFAULT OPTION:
     numpy.int64
-        NumPy integer (see above for its meaning, depending on dose_number being equal to 1, 2 or 3).
+        NumPy integer (see above for its meaning, depending on dose_number code).
+    
+    FOR THE OTHER OPTIONS:
+    numpy.float64
+        NumPy floating point (see above for its meaning, depending on dose_number code and option code).
     
     See Also
     --------
     get_vaccine_admin : full data about vaccine administration in Italy"""
 
-    data = get_vaccine_admin()
-    if data is not None:
+    vaccine_admin = get_vaccine_admin()
+    if vaccine_admin is not None:
         if dose_number == 1:
             # Previously infected individuals data are also added, since the dataframe returned by get_vaccine_admin() keeps them separate from first doses count
-            return data.sum()["first_dose"]+data.sum()["previously_infected"]
+            vaccinated = vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+            if option=="number" or option=="n":
+                return vaccinated
+            elif option=="over12" or option=="o":
+                total_over_12 = get_eligible().sum()["population"]
+                return vaccinated/total_over_12
+            elif option=="population" or option=="p":
+                total_population = get_istat_region_data().sum()["total"]
+                return vaccinated/total_population
+            else:
+                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
         elif dose_number == 2:
             # For vaccines requiring two doses data on second doses are taken, for vaccines requiring one single dose data on first doses are taken, for all vaccines data on previously infected individuals, completing the vaccination cycle with one single dose, are also taken, since their data are kept separate from first and second doses data
-            return data[data["manufacturer"]!="Janssen"].sum()["second_dose"]+data[data["manufacturer"]=="Janssen"].sum()["first_dose"]+data.sum()["previously_infected"]
+            vaccinated = vaccine_admin[vaccine_admin["manufacturer"]!="Janssen"].sum()["second_dose"]+vaccine_admin[vaccine_admin["manufacturer"]=="Janssen"].sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
+            if option=="number" or option=="n":
+                return vaccinated
+            elif option=="over12" or option=="o":
+                total_over_12 = get_eligible().sum()["population"]
+                return vaccinated/total_over_12
+            elif option=="population" or option=="p":
+                total_population = get_istat_region_data().sum()["total"]
+                return vaccinated/total_population
+            else:
+                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
         elif dose_number == 3:
-            return data.sum()["extra_dose"]
+            vaccinated = vaccine_admin.sum()["extra_dose"]
+            if option=="number" or option=="n":
+                return vaccinated
+            elif option=="over12" or option=="o":
+                total_over_12 = get_eligible().sum()["population"]
+                return vaccinated/total_over_12
+            elif option=="population" or option=="p":
+                total_population = get_istat_region_data().sum()["total"]
+                return vaccinated/total_population
+            else:
+                raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
         else:
-            print("ERROR Unvalid number code. Please see documentation for help on possible options.")
+            raise icl_b.ItaCovidLibArgumentError("unvalid number code. Please see documentation for help on possible number codes.")
+#            print("ERROR Unvalid number code. Please see documentation for help on possible options.")
 
 def tell_total_admin_points():
     """Returns the number of all vaccine administration points in Italy.
@@ -978,12 +1022,14 @@ def tell_manufacturer_delivered_doses(manufacturer):
         else:
             manufacturer_delivered_doses = np.int64(data[data["manufacturer"]==manufacturer].sum()["number_of_doses"])
             if manufacturer_delivered_doses == 0:
-                print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+                raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+#                print('ERROR No vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
             else:
                 return manufacturer_delivered_doses
 
 ### TO DO
-# - Turn error messages into exceptions
-# - Percentage option in tell functions
+# - Turn error messages into exceptions DONE
+# - Percentage option in tell functions DONE
+# - Fix option error in tell_total_vaccinated taking too much time
 # - Fix Raises in docstrings and/or remove None indication which is ambiguous
 # - Fix type int when it should be numpy.int64 in docstrings
