@@ -2,6 +2,8 @@ import sys
 sys.path.append("../itacovidlib")
 import itacovidlib.icl_backend as icl_b
 import numpy as np
+import pandas as pd
+import geopandas as gpd
 
 # ====================================================================================
 # FOR ALL get_<resource_name>() FUNCTIONS
@@ -1051,4 +1053,48 @@ def tell_manufacturer_delivered_doses(manufacturer):
             else:
                 return manufacturer_delivered_doses
 
+def prepare_for_plotting(source):
+    """Makes any Italian COVID Library generated DataFrame compatible with geopandas, for subsequent plotting on a map with Italian regions.
+    
+    Parameters
+    ----------
+    source : pandas.core.frame.DataFrame
+        Pandas DataFrame, with the data to plot, to make compatible with geopandas. Only Italian COVID Library generated DataFrames are guaranteed to work.
+    
+    Returns
+    -------
+    geopandas.geodataframe.GeoDataFrame
+        GeoPandas DataFrame, the Pandas DataFrame given as argument made compatible with GeoPandas.
+    
+    See Also
+    --------
+    region_plotter : plots directly the DataFrame given as an argument on a map with Italian regions. Use this function to instantly have the plot, with the possibility of basic customization. Use prepare_for_plotting if you need the full customization and editing potential of GeoPandas."""
+    regions_map = gpd.read_file("./regions_map.geojson")
+    source_with_geometry = gpd.GeoDataFrame(pd.merge(source, regions_map, on="region", how="inner"))
+    return source_with_geometry
+
+def region_plotter(source, column, legend=True, cmap="viridis"):
+    """Plots regional data on a map of Italy.
+    
+    Parameters
+    ----------
+    source : pandas.core.frame.DataFrame
+        Pandas DataFrame with the data to plot. Only Italian COVID Library generated DataFrames are guaranteed to work.
+    column : str
+        Name of the column with the data to plot
+    legend : bool
+        Displays or not a legend (default is True)
+    cmap : str
+        Code name of the color palette for plotting (for the list of codes see matplotlib.org/stable/tutorials/colors/colormaps)(default is "viridis")
+    
+    Returns
+    -------
+    matplotlib.axes._subplots.AxesSubplot
+        Plot of regional data
+    
+    See Also
+    --------
+    prepare_for_plotting: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
+    data_to_plot = prepare_for_plotting(source)
+    return data_to_plot.plot(column, legend=legend, cmap=cmap)
 
