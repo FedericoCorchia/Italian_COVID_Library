@@ -1053,13 +1053,20 @@ def tell_manufacturer_delivered_doses(manufacturer):
             else:
                 return manufacturer_delivered_doses
 
-def prepare_for_plotting(source):
-    """Makes any Italian COVID Library generated DataFrame compatible with geopandas, for subsequent plotting on a map with Italian regions.
+def prepare_for_plotting_on_map(source, on):
+    """Makes any Italian COVID Library generated DataFrame compatible with geopandas, for subsequent plotting on a map with Italian regions or provinces (depending on the option "on" specified).
     
     Parameters
     ----------
     source : pandas.core.frame.DataFrame
         Pandas DataFrame, with the data to plot, to make compatible with geopandas. Only Italian COVID Library generated DataFrames are guaranteed to work.
+    on : str
+        Option for choosing local subdivisions for plotting: regions (options "region", "regions" or "r") or provinces (options "province", "provinces" or "p")
+    
+    Raises
+    ------
+    ItaCovidLibArgumentError
+        Raised when improper arguments are passed to the function.
     
     Returns
     -------
@@ -1068,18 +1075,27 @@ def prepare_for_plotting(source):
     
     See Also
     --------
-    region_plotter : plots directly the DataFrame given as an argument on a map with Italian regions. Use this function to instantly have the plot, with the possibility of basic customization. Use prepare_for_plotting if you need the full customization and editing potential of GeoPandas."""
-    regions_map = gpd.read_file("./regions_map.geojson")
-    source_with_geometry = gpd.GeoDataFrame(pd.merge(source, regions_map, on="region", how="inner"))
-    return source_with_geometry
+    plot_on_map : plots directly the DataFrame given as an argument on a map with Italian regions or provinces. Use this function to instantly have the plot, with the possibility of basic customization. Use prepare_for_plotting_on_map if you need the full customization and editing potential of GeoPandas."""
+    if on=="region" or on=="regions" or on=="r":
+        italy_with_subdivisions = gpd.read_file("./regions_map.geojson")
+        source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
+        return source_with_geometry
+    elif on=="province" or on=="provinces" or on=="p":
+        italy_with_subdivisions = gpd.read_file("./provinces_map.geojson")
+        source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="province", how="inner"))
+        return source_with_geometry
+    else:
+        raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
 
-def region_plotter(source, column, legend=True, cmap="viridis"):
-    """Plots regional data on a map of Italy.
+def plot_on_map(source, on, column, legend=True, cmap="viridis"):
+    """Plots data on a map of Italy with regions or provinces, depending on the option "on" specified.
     
     Parameters
     ----------
     source : pandas.core.frame.DataFrame
         Pandas DataFrame with the data to plot. Only Italian COVID Library generated DataFrames are guaranteed to work.
+    on : str
+        Option for choosing local subdivisions for plotting: regions (options "region", "regions" or "r") or provinces (options "province", "provinces" or "p")
     column : str
         Name of the column with the data to plot
     legend : bool
@@ -1090,11 +1106,11 @@ def region_plotter(source, column, legend=True, cmap="viridis"):
     Returns
     -------
     matplotlib.axes._subplots.AxesSubplot
-        Plot of regional data
+        Map of data by region or province.
     
     See Also
     --------
-    prepare_for_plotting: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
-    data_to_plot = prepare_for_plotting(source)
+    prepare_for_plotting_on_map: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
+    data_to_plot = prepare_for_plotting_on_map(source, on)
     return data_to_plot.plot(column, legend=legend, cmap=cmap)
 
