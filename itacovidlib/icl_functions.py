@@ -1077,11 +1077,17 @@ def prepare_for_plotting_on_map(source, on):
     --------
     plot_on_map : plots directly the DataFrame given as an argument on a map with Italian regions or provinces. Use this function to instantly have the plot, with the possibility of basic customization. Use prepare_for_plotting_on_map if you need the full customization and editing potential of GeoPandas."""
     if on=="region" or on=="regions" or on=="r":
+        # file contains Italian regions with their borders
         italy_with_subdivisions = gpd.read_file("./regions_map.geojson")
+        # in this way, input DataFrame includes regional borders
         source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
         return source_with_geometry
     elif on=="province" or on=="provinces" or on=="p":
+        # file contains Italian provinces with their borders
         italy_with_subdivisions = gpd.read_file("./provinces_map.geojson")
+        # the following solves an issue with Sardinian provinces, which are not optimally described by the provinces file
+        italy_with_subdivisions = italy_with_subdivisions.dissolve(by="province")
+        # in this way, input DataFrame includes province borders
         source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="province", how="inner"))
         return source_with_geometry
     else:
@@ -1103,6 +1109,11 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
     cmap : str
         Code name of the color palette for plotting (for the list of codes see matplotlib.org/stable/tutorials/colors/colormaps)(default is "viridis")
     
+    Raises
+    ------
+    ItaCovidLibArgumentError
+        Raised when improper arguments are passed to the function.
+    
     Returns
     -------
     matplotlib.axes._subplots.AxesSubplot
@@ -1111,6 +1122,7 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
     See Also
     --------
     prepare_for_plotting_on_map: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
+    # in this way, input DataFrame can be plotted on a map correctly
     data_to_plot = prepare_for_plotting_on_map(source, on)
     return data_to_plot.plot(column, legend=legend, cmap=cmap)
 
