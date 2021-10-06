@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 import io
-import sys
 
 # errors are shown as clearly coming from Italian COVID Library to distinguish them from the ones raised by other libraries.
 class ItaCovidLibConnectionError(requests.exceptions.ConnectionError): pass
