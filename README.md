@@ -9,8 +9,9 @@ Simply clone this repository and use it as a normal Python package:
 ## Requirements
 Functioning of Italian_COVID_Library requires the following:
 - Python (guaranteed for version 3.8.5 or higher, TO BE CHECKED FOR PREVIOUS VERSIONS)
-- pandas
 - numpy
+- pandas
+- geopandas
 - requests
 - setuptools
 
@@ -29,6 +30,8 @@ For data on COVID-19 cases in Italy: [pcm-dpc/COVID-19](https://github.com/pcm-d
 For data on vaccinations in Italy: [italia/covid19-opendata-vaccini](https://github.com/italia/covid19-opendata-vaccini) - "Open Data su consegna e somministrazione dei vaccini anti COVID-19 in Italia - Commissario straordinario per l'emergenza Covid-19", by Commissario straordinario per l'emergenza Covid-19 - Presidenza del Consiglio dei Ministri
 
 Both are released under **Creative Commons - Attribution 4.0 International (CC BY 4.0)** [Full license](https://creativecommons.org/licenses/by/4.0/legalcode) - [Summary](https://creativecommons.org/licenses/by/4.0/deed.en)
+
+For .geojson files with Italian regions and provinces: [datajournalism-it/regioni-con-trento-bolzano.geojson](https://gist.github.com/datajournalism-it/f1abb68e718b54f6a0fe) and [datajournalism-it/province.geojson](https://gist.github.com/datajournalism-it/212e7134625fbee6f9f7) by Datajournalism.it
 
 Downloader functions provide the original data as they are without any modification apart from translating them into English.
 
