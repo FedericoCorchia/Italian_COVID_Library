@@ -46,11 +46,13 @@ def get_vaccine_ages():
         Number of vaccine administrations to individuals infected between 3 and 6 months before, as such completing the vaccination cycle with a single dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
-    last_update : str
+    last_update : datetime
         Date of last update"""
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
     if data is not None:
+        # date in "ultimo_aggiornamento" (last update) must be parsed into datetime object
+        data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
         return data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"})
 
 def get_vaccine_deliveries():
@@ -91,6 +93,8 @@ def get_vaccine_deliveries():
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv")
     if data is not None:
+        # dates in column "data_consegna" (date of delivery) must be parsed into datetime objects
+        data["data_consegna"] = pd.to_datetime(data["data_consegna"])
         return data.rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_eligible():
@@ -180,7 +184,7 @@ def get_admin_sites_types():
     Returns
     -------
     pandas.core.frame.DataFrame
-    Pandas dataframe with requested data.
+        Pandas dataframe with requested data.
     
     Dataframe Columns
     -----------------
@@ -257,6 +261,8 @@ def get_vaccine_admin():
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv")
     if data is not None:
+        # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
+        data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
         return data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_admin_summary():
@@ -311,6 +317,8 @@ def get_vaccine_admin_summary():
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv")
     if data is not None:
+        # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
+        data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
         return data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_summary():
@@ -359,6 +367,8 @@ def get_vaccine_summary():
     
     data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv")
     if data is not None:
+        # dates in column "ultimo_aggiornamento" (last update) must be parsed into datetime objects
+        data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
         return data.rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_national_trend():
@@ -380,7 +390,7 @@ def get_national_trend():
     
     Dataframe Columns
     -----------------
-    date : str
+    date : datetime
         Date
     country : str
         Country
@@ -435,6 +445,8 @@ def get_national_trend():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_national_trend_latest():
@@ -464,6 +476,8 @@ def get_national_trend_latest():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_equip_contracts():
@@ -503,7 +517,7 @@ def get_equip_contracts():
         Equipment name
     negotiation_protocol : str
         Name of negotiation protocol
-    negotiation_date : str
+    negotiation_date : datetime
         Date of negotiation
     negotiation_file : str
         Negotiation file link
@@ -531,7 +545,7 @@ def get_equip_contracts():
         State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
     notes : float64
         Notes
-    update_date : str
+    update_date : datetime
         Date of update
     
     See Also
@@ -540,6 +554,10 @@ def get_equip_contracts():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv")
     if data is not None:
+        # dates in column "data_atto_negoziale" (negotiation date) must be parsed into datetime objects
+        data["data_atto_negoziale"] = pd.to_datetime(data["data_atto_negoziale"])
+        # dates in column "data_aggiornamento" (update date) must be parsed into datetime objects
+        data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
         return data.rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"cig_type","cig":"cig","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_equip_contracts_payments():
@@ -577,7 +595,7 @@ def get_equip_contracts_payments():
         State of cession to Special Commissioner for COVID-19 emergency (ITA: Commissario Straordinario)
     notes : float64
         Notes
-    update_date : str
+    update_date : datetime
         Date of update
     
     See Also
@@ -586,6 +604,8 @@ def get_equip_contracts_payments():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv")
     if data is not None:
+        # dates in column "data_aggiornamento" (update date) must be parsed into datetime objects
+        data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
         return data.rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_province_cases():
@@ -607,7 +627,7 @@ def get_province_cases():
     
     Dataframe Columns
     -----------------
-    date : str
+    date : datetime
         Date
     country : str
         Country
@@ -642,6 +662,8 @@ def get_province_cases():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_province_cases_latest():
@@ -671,6 +693,8 @@ def get_province_cases_latest():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_region_cases_latest():
@@ -700,6 +724,8 @@ def get_region_cases_latest():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_region_cases():
@@ -721,7 +747,7 @@ def get_region_cases():
     
     Dataframe Columns
     -----------------
-    date : str
+    date : datetime
         Date
     country : str
         Country
@@ -788,6 +814,8 @@ def get_region_cases():
     
     data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
     if data is not None:
+        # dates in column "data" (Italian for date) must be parsed into datetime objects
+        data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_over_80():
