@@ -6,7 +6,7 @@ import io
 class ItaCovidLibConnectionError(requests.exceptions.ConnectionError): pass
 class ItaCovidLibArgumentError(Exception): pass
 
-def get(url):
+def _get(url):
     """Returns a dataframe from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name>() functions.
     
     Parameters
@@ -26,7 +26,7 @@ def get(url):
     
     See Also
     --------
-    Any function whose name begins with get_ : uses get(url)"""
+    Any function whose name begins with get_ : uses _get(url)"""
 
     try:
         downloaded_content = requests.get(url).content

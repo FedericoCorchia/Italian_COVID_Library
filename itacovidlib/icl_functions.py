@@ -49,7 +49,7 @@ def get_vaccine_ages():
     last_update : datetime
         Date of last update"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
     if data is not None:
         # date in "ultimo_aggiornamento" (last update) must be parsed into datetime object
         data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
@@ -91,7 +91,7 @@ def get_vaccine_deliveries():
     region : str
         Official region name"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv")
     if data is not None:
         # dates in column "data_consegna" (date of delivery) must be parsed into datetime objects
         data["data_consegna"] = pd.to_datetime(data["data_consegna"])
@@ -125,7 +125,7 @@ def get_eligible():
     population : int64
         Total population per given age group"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv")
     if data is not None:
         return data.rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
 
@@ -165,7 +165,7 @@ def get_admin_sites():
     region : str
         Official region name"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.csv")
     if data is not None:
         return data.rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
@@ -203,7 +203,7 @@ def get_admin_sites_types():
     region : str
         Official region name"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-tipologia.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-tipologia.csv")
     if data is not None:
         return data.rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
@@ -259,7 +259,7 @@ def get_vaccine_admin():
     --------
     get_vaccine_admin_summary : a concise version (summary) of this function"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv")
     if data is not None:
         # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
         data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
@@ -315,7 +315,7 @@ def get_vaccine_admin_summary():
     --------
     get_vaccine_admin : a complete version of this function with more data"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv")
     if data is not None:
         # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
         data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
@@ -365,7 +365,7 @@ def get_vaccine_summary():
     get_vaccine_admin_summary : more info on COVID-19 vaccine administrations (concise version)
     get_vaccine_admin : more info on COVID-19 vaccine administrations (complete version)"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv")
     if data is not None:
         # dates in column "ultimo_aggiornamento" (last update) must be parsed into datetime objects
         data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
@@ -443,7 +443,7 @@ def get_national_trend():
     --------
     get_national_trend_latest : only returns data referred to the current day"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -474,7 +474,7 @@ def get_national_trend_latest():
     --------
     get_national_trend : also includes the situation on all days since the beginning of the pandemic"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -552,7 +552,7 @@ def get_equip_contracts():
     --------
     get_equip_contracts_payments : data about payments for COVID-19 pandemic equipment"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv")
     if data is not None:
         # dates in column "data_atto_negoziale" (negotiation date) must be parsed into datetime objects
         data["data_atto_negoziale"] = pd.to_datetime(data["data_atto_negoziale"])
@@ -602,7 +602,7 @@ def get_equip_contracts_payments():
     --------
     get_equip_contracts : data about COVID-19 equipment contracts"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv")
     if data is not None:
         # dates in column "data_aggiornamento" (update date) must be parsed into datetime objects
         data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
@@ -660,7 +660,7 @@ def get_province_cases():
     --------
     get_province_cases_latest : only returns data referred to the current day"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -691,7 +691,7 @@ def get_province_cases_latest():
     --------
     get_province_cases : also includes the situation on all days since the beginning of the pandemic"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -722,7 +722,7 @@ def get_region_cases_latest():
     --------
     get_region_cases : also includes the situation on all days since the beginning of the pandemic"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -812,7 +812,7 @@ def get_region_cases():
     --------
     get_region_cases_latest : only returns data referred to the current day"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
@@ -856,7 +856,7 @@ def get_over_80():
     total : int64
         Total number of over 80 individuals"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv")
     if data is not None:
         return data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
 
@@ -904,7 +904,7 @@ def get_istat_region_data():
     total : int64
         Total number of individuals"""
     
-    data = icl_b.get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv")
+    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv")
     if data is not None:
         return data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","sigla_regione":"region_abbreviation","latitudine_regione":"lat","longitudine_regione":"long","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
 
