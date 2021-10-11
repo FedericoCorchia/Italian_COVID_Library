@@ -6,7 +6,7 @@ import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl
 def test_no_Internet_connection():
     # to be performed under no Internet connection
     try:
-        icl_b.get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
+        icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
     except icl_b.ItaCovidLibConnectionError:
         print("No Internet connection exception handled successfully.")
 
