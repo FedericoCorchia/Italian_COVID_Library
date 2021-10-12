@@ -4,6 +4,8 @@ import itacovidlib.icl_backend as icl_b
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+import epyestim.covid19 as covid19
+import datetime
 
 # ====================================================================================
 # FOR ALL get_<resource_name>() FUNCTIONS
@@ -1154,3 +1156,11 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
     data_to_plot = prepare_for_plotting_on_map(source, on)
     return data_to_plot.plot(column, legend=legend, cmap=cmap)
 
+def tell_rt():
+    # cases per day are returned by get_national_trend
+    trend = get_national_trend()
+    # covid19.r_covid requires dates without hours, minutes and seconds
+    trend["date"] = trend["date"].apply(datetime.datetime.date)
+    # covid19.r_covid also requires dates to be the indices
+    trend.set_index("date", inplace=True)
+    return covid19.r_covid(trend["new_cases"])
