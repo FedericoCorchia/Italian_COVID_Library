@@ -14,7 +14,7 @@ import datetime
 # ====================================================================================
 
 def get_vaccine_ages():
-    """Returns dataframe about COVID-19 vaccine administrations per age group in Italy.
+    """Returns DataFrame about COVID-19 vaccine administrations per age group in Italy.
     
     Parameters
     ----------
@@ -28,9 +28,9 @@ def get_vaccine_ages():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     age_group : str
         Age groups
@@ -58,7 +58,7 @@ def get_vaccine_ages():
         return data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"})
 
 def get_vaccine_deliveries():
-    """Returns dataframe about COVID-19 vaccine deliveries in Italy.
+    """Returns DataFrame about COVID-19 vaccine deliveries in Italy.
     
     Parameters
     ----------
@@ -72,9 +72,9 @@ def get_vaccine_deliveries():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : str
         Code of delivery region
@@ -100,7 +100,7 @@ def get_vaccine_deliveries():
         return data.rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_eligible():
-    """Returns dataframe about eligible persons for COVID-19 vaccine administration in Italy.
+    """Returns DataFrame about eligible persons for COVID-19 vaccine administration in Italy.
     
     Parameters
     ----------
@@ -114,9 +114,9 @@ def get_eligible():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : str
         Code of delivery region
@@ -132,7 +132,7 @@ def get_eligible():
         return data.rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
 
 def get_admin_sites():
-    """Returns dataframe about COVID-19 vaccine administrations points in Italy.
+    """Returns DataFrame about COVID-19 vaccine administrations points in Italy.
     
     Parameters
     ----------
@@ -146,9 +146,9 @@ def get_admin_sites():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : str
         Region code
@@ -172,7 +172,7 @@ def get_admin_sites():
         return data.rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_admin_sites_types():
-    """Returns dataframe on types of COVID-19 vaccine administration points in Italy.
+    """Returns DataFrame on types of COVID-19 vaccine administration points in Italy.
     
     Parameters
     ----------
@@ -186,9 +186,9 @@ def get_admin_sites_types():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : str
         Region code
@@ -210,7 +210,7 @@ def get_admin_sites_types():
         return data.rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_admin():
-    """Returns dataframe on COVID-19 vaccine administration in Italy.
+    """Returns DataFrame on COVID-19 vaccine administration in Italy.
     
     Parameters
     ----------
@@ -224,9 +224,9 @@ def get_vaccine_admin():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     date : datetime
         Date of administration
@@ -268,7 +268,7 @@ def get_vaccine_admin():
         return data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_admin_summary():
-    """Returns dataframe about COVID-19 vaccine administration in Italy (summary version)
+    """Returns DataFrame about COVID-19 vaccine administration in Italy (summary version)
     
     Parameters
     ----------
@@ -282,9 +282,9 @@ def get_vaccine_admin_summary():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     date : datetime
         Date of administration
@@ -324,7 +324,7 @@ def get_vaccine_admin_summary():
         return data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_vaccine_summary():
-    """Returns dataframe with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
+    """Returns DataFrame with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
     
     Parameters
     ----------
@@ -338,9 +338,9 @@ def get_vaccine_summary():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with requested data.
+        Pandas DataFrame with requested data.
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : str
         Region code
@@ -374,7 +374,7 @@ def get_vaccine_summary():
         return data.rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
 def get_national_trend():
-    """Returns dataframe about COVID-19 pandemic situation in Italy.
+    """Returns DataFrame about COVID-19 pandemic situation in Italy.
     
     Parameters
     ----------
@@ -388,9 +388,9 @@ def get_national_trend():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Dataframe about COVID-19 pandemic situation in Italy
+        Pandas DataFrame about COVID-19 pandemic situation in Italy
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     date : datetime
         Date
@@ -443,7 +443,8 @@ def get_national_trend():
     
     See Also
     --------
-    get_national_trend_latest : only returns data referred to the current day"""
+    get_national_trend_latest : only returns data referred to the current day
+    tell_rt : returns the Rt index over time calculated from these data"""
     
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
     if data is not None:
@@ -452,7 +453,7 @@ def get_national_trend():
         return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_national_trend_latest():
-    """Returns dataframe about COVID-19 pandemic situation in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_national_trend().
+    """Returns DataFrame about COVID-19 pandemic situation in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_national_trend().
     
     Parameters
     ----------
@@ -466,9 +467,9 @@ def get_national_trend_latest():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe about COVID-19 pandemic situation in Italy on the current day (i.e. the last update).
+        Pandas DataFrame about COVID-19 pandemic situation in Italy on the current day (i.e. the last update).
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     Please see documentation of get_national_trend()
     
@@ -497,9 +498,9 @@ def get_equip_contracts():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with data about COVID-19 pandemic equipment contracts
+        Pandas DataFrame with data about COVID-19 pandemic equipment contracts
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     manufacturer : str
         Equipment manufacturer name
@@ -577,9 +578,9 @@ def get_equip_contracts_payments():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe about payments for COVID-19 equipment
+        Pandas DataFrame about payments for COVID-19 equipment
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     negotiation_protocol : str
         Name of negotiation protocol
@@ -611,7 +612,7 @@ def get_equip_contracts_payments():
         return data.rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
 def get_province_cases():
-    """Returns dataframe about COVID-19 cases per province in Italy.
+    """Returns DataFrame about COVID-19 cases per province in Italy.
     
     Parameters
     ----------
@@ -625,9 +626,9 @@ def get_province_cases():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Dataframe about COVID-19 cases per province
+        Pandas DataFrame about COVID-19 cases per province
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     date : datetime
         Date
@@ -669,7 +670,7 @@ def get_province_cases():
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_province_cases_latest():
-    """Returns dataframe about COVID-19 cases per province in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_province_cases().
+    """Returns DataFrame about COVID-19 cases per province in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_province_cases().
     
     Parameters
     ----------
@@ -683,9 +684,9 @@ def get_province_cases_latest():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Dataframe about COVID-19 cases per province on the current day
+        Pandas DataFrame about COVID-19 cases per province on the current day
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     Please see get_province_cases() documentation
     
@@ -700,7 +701,7 @@ def get_province_cases_latest():
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
 
 def get_region_cases_latest():
-    """Returns dataframe about COVID-19 cases per region in Italy on the current day (the last update), i.e. the most recent row of the dataframe that can be called with get_region_cases().
+    """Returns DataFrame about COVID-19 cases per region in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_region_cases().
     
     Parameters
     ----------
@@ -714,9 +715,9 @@ def get_region_cases_latest():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe about COVID-19 cases per region on the current day
+        Pandas DataFrame about COVID-19 cases per region on the current day
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     Please see documentation of get_region_cases()
     
@@ -731,7 +732,7 @@ def get_region_cases_latest():
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
 
 def get_region_cases():
-    """Returns dataframe about COVID-19 cases per region in Italy.
+    """Returns DataFrame about COVID-19 cases per region in Italy.
     
     Parameters
     ----------
@@ -745,9 +746,9 @@ def get_region_cases():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe about COVID-19 cases per region
+        Pandas DataFrame about COVID-19 cases per region
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     date : datetime
         Date
@@ -835,9 +836,9 @@ def get_over_80():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with data on over 80 individuals
+        Pandas DataFrame with data on over 80 individuals
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : int64
         Region code number
@@ -877,9 +878,9 @@ def get_istat_region_data():
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with data about Italian regions from ISTAT
+        Pandas DataFrame with data about Italian regions from ISTAT
     
-    Dataframe Columns
+    DataFrame Columns
     -----------------
     region_code : int64
         Region code number
@@ -983,7 +984,7 @@ def tell_total_vaccinated(dose_number, option="n"):
         vaccine_admin = get_vaccine_admin()
         if vaccine_admin is not None:
             if dose_number == 1:
-                # Previously infected individuals data are also added, since the dataframe returned by get_vaccine_admin() keeps them separate from first doses count
+                # Previously infected individuals data are also added, since the DataFrame returned by get_vaccine_admin() keeps them separate from first doses count
                 vaccinated = vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
                 if option=="number" or option=="n":
                     return vaccinated
@@ -1157,6 +1158,40 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
     return data_to_plot.plot(column, legend=legend, cmap=cmap)
 
 def tell_rt():
+    """Returns a DataFrame with Rt values over time in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
+    
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas DataFrame containing Rt values over time.
+    
+    DataFrame Columns
+    -----------------
+    cases : numpy.float64
+        Number of new cases on given date
+    R_mean : numpy.float64
+        Rt best value
+    R_var : numpy.float64
+        Variance on R_mean
+    Q0.025 : numpy.float64
+        Rt quantile at 0.025
+    Q0.5 : numpy.float64
+        Rt quantile at 0.5
+    Q0.975 : numpy.float64
+        Rt quantile at 0.975
+    
+    See Also
+    --------
+    get_national_trend : returns cases and the general situation of the epidemic in Italy over time"""
     # cases per day are returned by get_national_trend
     trend = get_national_trend()
     # covid19.r_covid requires dates without hours, minutes and seconds
