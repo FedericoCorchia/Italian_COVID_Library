@@ -373,12 +373,13 @@ def get_vaccine_summary():
         data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
         return data.rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
 
-def get_national_trend():
+def get_national_trend(latest=False):
     """Returns DataFrame about COVID-19 pandemic situation in Italy.
     
     Parameters
     ----------
-    None
+    latest : bool
+        Option for returning data referred to the current day only (default is False)
     
     Raises
     ------
@@ -443,45 +444,17 @@ def get_national_trend():
     
     See Also
     --------
-    get_national_trend_latest : only returns data referred to the current day
     tell_rt : returns the Rt index over time calculated from these data"""
     
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
+    if latest == False:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale.csv")
+    elif latest == True:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
-def get_national_trend_latest():
-    """Returns DataFrame about COVID-19 pandemic situation in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_national_trend().
-    
-    Parameters
-    ----------
-    None
-    
-    Raises
-    ------
-    ItaCovidLibConnectionError
-        Raised when there are issues with Internet connection.
-    
-    Returns
-    -------
-    pandas.core.frame.DataFrame
-        Pandas DataFrame about COVID-19 pandemic situation in Italy on the current day (i.e. the last update).
-    
-    DataFrame Columns
-    -----------------
-    Please see documentation of get_national_trend()
-    
-    See Also
-    --------
-    get_national_trend : also includes the situation on all days since the beginning of the pandemic"""
-    
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
-    if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
 
 def get_equip_contracts():
     """Returns data about COVID-19 pandemic equipment contracts for Italy.
@@ -611,12 +584,13 @@ def get_equip_contracts_payments():
         data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
         return data.rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
 
-def get_province_cases():
+def get_province_cases(latest=False):
     """Returns DataFrame about COVID-19 cases per province in Italy.
     
     Parameters
     ----------
-    None
+    latest : bool
+        Option for returning data referred to the current day only (default is False) 
     
     Raises
     ------
@@ -661,82 +635,25 @@ def get_province_cases():
     
     See Also
     --------
-    get_province_cases_latest : only returns data referred to the current day"""
+    get_region_cases : returns data referred to regions"""
     
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv")
+    if latest == False:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province.csv")
+    elif latest == True:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
         return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
+    
 
-def get_province_cases_latest():
-    """Returns DataFrame about COVID-19 cases per province in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_province_cases().
-    
-    Parameters
-    ----------
-    None
-    
-    Raises
-    ------
-    ItaCovidLibConnectionError
-        Raised when there are issues with Internet connection.
-    
-    Returns
-    -------
-    pandas.core.frame.DataFrame
-        Pandas DataFrame about COVID-19 cases per province on the current day
-    
-    DataFrame Columns
-    -----------------
-    Please see get_province_cases() documentation
-    
-    See Also
-    --------
-    get_province_cases : also includes the situation on all days since the beginning of the pandemic"""
-    
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
-    if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
-
-def get_region_cases_latest():
-    """Returns DataFrame about COVID-19 cases per region in Italy on the current day (the last update), i.e. the most recent row of the DataFrame that can be called with get_region_cases().
-    
-    Parameters
-    ----------
-    None
-    
-    Raises
-    ------
-    ItaCovidLibConnectionError
-        Raised when there are issues with Internet connection.
-    
-    Returns
-    -------
-    pandas.core.frame.DataFrame
-        Pandas DataFrame about COVID-19 cases per region on the current day
-    
-    DataFrame Columns
-    -----------------
-    Please see documentation of get_region_cases()
-    
-    See Also
-    --------
-    get_region_cases : also includes the situation on all days since the beginning of the pandemic"""
-    
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
-    if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
-
-def get_region_cases():
+def get_region_cases(latest=False):
     """Returns DataFrame about COVID-19 cases per region in Italy.
     
     Parameters
     ----------
-    None
+    latest : bool
+        Option for returning data referred to the current day only (default is False)
     
     Raises
     ------
@@ -813,9 +730,12 @@ def get_region_cases():
     
     See Also
     --------
-    get_region_cases_latest : only returns data referred to the current day"""
+    get_province_cases : returns data referred to provinces"""
     
-    data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
+    if latest == False:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
+    elif latest == True:
+        data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
     if data is not None:
         # dates in column "data" (Italian for date) must be parsed into datetime objects
         data["data"] = pd.to_datetime(data["data"])
