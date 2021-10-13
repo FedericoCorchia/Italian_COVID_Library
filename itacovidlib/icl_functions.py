@@ -1044,7 +1044,7 @@ def prepare_for_plotting_on_map(source, on):
     else:
         raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
 
-def plot_on_map(source, on, column, legend=True, cmap="viridis"):
+def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     """Plots data on a map of Italy with regions or provinces, depending on the option "on" specified.
     
     Parameters
@@ -1055,6 +1055,8 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
         Option for choosing local subdivisions for plotting: regions (options "region", "regions" or "r") or provinces (options "province", "provinces" or "p")
     column : str
         Name of the column with the data to plot
+    title : str
+        Title to give the plot (default is a null title)
     legend : bool
         Displays or not a legend (default is True)
     cmap : str
@@ -1073,9 +1075,13 @@ def plot_on_map(source, on, column, legend=True, cmap="viridis"):
     See Also
     --------
     prepare_for_plotting_on_map: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
-    # in this way, input DataFrame can be plotted on a map correctly
+    # with the following function, input DataFrame can be plotted on a map correctly
     data_to_plot = prepare_for_plotting_on_map(source, on)
-    return data_to_plot.plot(column, legend=legend, cmap=cmap)
+    plot = data_to_plot.plot(column, legend=legend, cmap=cmap)
+    # plot returned by plot function also includes anti-aesthetic latitude and longitude axes
+    plot.set_axis_off()
+    plot.set_title(title)
+    return plot
 
 def tell_rt():
     """Returns a DataFrame with Rt values over time in Italy.
