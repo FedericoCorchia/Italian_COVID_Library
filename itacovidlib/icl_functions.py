@@ -53,9 +53,12 @@ def get_vaccine_ages():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
     if data is not None:
-        # date in "ultimo_aggiornamento" (last update) must be parsed into datetime object
-        data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
-        return data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"})
+        # column names must be translated from Italian
+        data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"}, inplace=True)
+        # dates in last_update must be parsed into datetime objects
+        data["last_update"] = pd.to_datetime(data["last_update"])
+        data.set_index("age_group", inplace=True)
+        return data
 
 def get_vaccine_deliveries():
     """Returns DataFrame about COVID-19 vaccine deliveries in Italy.
@@ -95,9 +98,12 @@ def get_vaccine_deliveries():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/consegne-vaccini-latest.csv")
     if data is not None:
-        # dates in column "data_consegna" (date of delivery) must be parsed into datetime objects
-        data["data_consegna"] = pd.to_datetime(data["data_consegna"])
-        return data.rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # dates in column date_of_delivery must be parsed into datetime objects
+        data["date_of_delivery"] = pd.to_datetime(data["date_of_delivery"])
+        data.set_index("date_of_delivery", inplace=True)
+        return data
 
 def get_eligible():
     """Returns DataFrame about eligible persons for COVID-19 vaccine administration in Italy.
@@ -129,7 +135,10 @@ def get_eligible():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv")
     if data is not None:
-        return data.rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"})
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"}, inplace=True)
+        data.set_index("age_group", inplace=True)
+        return data
 
 def get_admin_sites():
     """Returns DataFrame about COVID-19 vaccine administrations points in Italy.
@@ -169,7 +178,11 @@ def get_admin_sites():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-latest.csv")
     if data is not None:
-        return data.rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
+        data.set_index("ISTAT_region_code", inplace=True)
+        return data
 
 def get_admin_sites_types():
     """Returns DataFrame on types of COVID-19 vaccine administration points in Italy.
@@ -207,7 +220,11 @@ def get_admin_sites_types():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/punti-somministrazione-tipologia.csv")
     if data is not None:
-        return data.rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
+        data.set_index("ISTAT_region_code", inplace=True)
+        return data
 
 def get_vaccine_admin():
     """Returns DataFrame on COVID-19 vaccine administration in Italy.
@@ -263,10 +280,13 @@ def get_vaccine_admin():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv")
     if data is not None:
-        # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
-        data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
-        return data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
-
+        # column names must be translated from Italian
+        data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # dates in column date must be parsed into datetime objects
+        data["date"] = pd.to_datetime(data["date"])
+        data.set_index("date", inplace=True)
+        return data
+    
 def get_vaccine_admin_summary():
     """Returns DataFrame about COVID-19 vaccine administration in Italy (summary version)
     
@@ -319,10 +339,13 @@ def get_vaccine_admin_summary():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv")
     if data is not None:
-        # dates in column "data_somministrazione" (administration date) must be parsed into datetime objects
-        data["data_somministrazione"] = pd.to_datetime(data["data_somministrazione"])
-        return data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
-
+        # column names must be translated from Italian
+        data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # dates in column date must be parsed into datetime objects
+        data["date"] = pd.to_datetime(data["date"])
+        data.set_index("date", inplace=True)
+        return data
+    
 def get_vaccine_summary():
     """Returns DataFrame with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
     
@@ -369,9 +392,15 @@ def get_vaccine_summary():
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/vaccini-summary-latest.csv")
     if data is not None:
-        # dates in column "ultimo_aggiornamento" (last update) must be parsed into datetime objects
-        data["ultimo_aggiornamento"] = pd.to_datetime(data["ultimo_aggiornamento"])
-        return data.rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"})
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","dosi_somministrate":"administered_doses","dosi_consegnate":"delivered_doses","percentuale_somministrazione":"administration_percent","ultimo_aggiornamento":"last_update","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # dates in column last_update must be parsed into datetime objects
+        data["last_update"] = pd.to_datetime(data["last_update"])
+        # for proper indexing
+        data.sort_values(by="ISTAT_region_code", inplace=True)
+        # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
+        data.set_index("ISTAT_region_code", inplace=True)
+        return data
 
 def get_national_trend(latest=False):
     """Returns DataFrame about COVID-19 pandemic situation in Italy.
@@ -451,9 +480,12 @@ def get_national_trend(latest=False):
     elif latest == True:
         data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-latest.csv")
     if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"})
+        # column names must be translated from Italian
+        data.rename(columns={"data":"date","stato":"country","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests"}, inplace=True)
+        # dates in column date must be parsed into datetime objects
+        data["date"] = pd.to_datetime(data["date"])
+        data.set_index("date", inplace=True)
+        return data
 
 
 def get_equip_contracts():
@@ -530,11 +562,14 @@ def get_equip_contracts():
     
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv")
     if data is not None:
-        # dates in column "data_atto_negoziale" (negotiation date) must be parsed into datetime objects
-        data["data_atto_negoziale"] = pd.to_datetime(data["data_atto_negoziale"])
-        # dates in column "data_aggiornamento" (update date) must be parsed into datetime objects
-        data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
-        return data.rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"cig_type","cig":"cig","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
+        # column names must be translated from Italian
+        data.rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"cig_type","cig":"cig","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"}, inplace=True)
+        # dates in column negotiation_date must be parsed into datetime objects
+        data["negotiation_date"] = pd.to_datetime(data["negotiation_date"])
+        # dates in column update_date must be parsed into datetime objects
+        data["update_date"] = pd.to_datetime(data["update_date"])
+        data.set_index("negotiation_date", inplace=True)
+        return data
 
 def get_equip_contracts_payments():
     """Returns data about payments for COVID-19 equipment in Italy, as established by contracts.
@@ -580,9 +615,12 @@ def get_equip_contracts_payments():
     
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-pagamenti-contratti-dpc-forniture.csv")
     if data is not None:
-        # dates in column "data_aggiornamento" (update date) must be parsed into datetime objects
-        data["data_aggiornamento"] = pd.to_datetime(data["data_aggiornamento"])
-        return data.rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"})
+        # column names must be translated from Italian
+        data.rename(columns={"protocollo_atto_negoziale":"negotiation_protocol","totale_fornitura":"total_equipment","totale_pagato":"total_paid","pagato_donazioni":"donations","pagato_altri_fondi":"other_funds","fondo_pagamento":"payment_fund","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"}, inplace=True)
+        # dates in column update_date must be parsed into datetime objects
+        data["update_date"] = pd.to_datetime(data["update_date"])
+        data.set_index("negotiation_protocol", inplace=True)
+        return data
 
 def get_province_cases(latest=False):
     """Returns DataFrame about COVID-19 cases per province in Italy.
@@ -642,9 +680,12 @@ def get_province_cases(latest=False):
     elif latest == True:
         data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-province/dpc-covid19-ita-province-latest.csv")
     if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"})
+        # column names must be translated from Italian
+        data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","codice_provincia":"province_code","denominazione_provincia":"province","sigla_provincia":"province_abbreviation","lat":"lat","long":"long","totale_casi":"cumulative_cases","note":"notes","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code","codice_nuts_3":"NUTS3_code"}, inplace=True)
+        # dates in column date must be parsed into datetime objects
+        data["date"] = pd.to_datetime(data["date"])
+        data.set_index("date", inplace=True)
+        return data
     
 
 def get_region_cases(latest=False):
@@ -737,9 +778,12 @@ def get_region_cases(latest=False):
     elif latest == True:
         data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni-latest.csv")
     if data is not None:
-        # dates in column "data" (Italian for date) must be parsed into datetime objects
-        data["data"] = pd.to_datetime(data["data"])
-        return data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"})
+        # column names must be translated from Italian
+        data.rename(columns={"data":"date","stato":"country","codice_regione":"region_code","denominazione_regione":"region","ricoverati_con_sintomi":"hospitalized_with_symptoms","terapia_intensiva":"intensive_care","totale_ospedalizzati":"hospitalized","isolamento_domiciliare":"isolation","totale_positivi":"cases","variazione_totale_positivi":"cases_variation","nuovi_positivi":"new_cases","dimessi_guariti":"recovered_released","deceduti":"deaths","casi_da_sospetto_diagnostico":"cases_from_clinical_suspects","casi_da_screening":"cases_from_screening","totale_casi":"cumulative_cases","tamponi":"swabs","casi_testati":"tested","note":"notes","ingressi_terapia_intensiva":"intensive_care_in","note_test":"test_notes","note_casi":"case_notes","totale_positivi_test_molecolare":"molecular_test_cases","totale_positivi_test_antigenico_rapido":"antigen_test_cases","tamponi_test_molecolare":"molecular_tests","tamponi_test_antigenico_rapido":"antigen_tests","codice_nuts_1":"NUTS1_code","codice_nuts_2":"NUTS2_code"}, inplace=True)
+        # dates in column date must be parsed into datetime objects
+        data["date"] = pd.to_datetime(data["date"])
+        data.set_index("date", inplace=True)
+        return data
 
 def get_over_80():
     """Returns data on over 80 individuals in Italy
@@ -781,19 +825,29 @@ def get_over_80():
     
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-over80.csv")
     if data is not None:
-        return data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
+        # column names must be translated from Italian
+        data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"}, inplace=True)
+        # for proper indexing
+        data.sort_values(by="region_code", inplace=True)
+        # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
+        data.set_index("region_code", inplace=True)
+        return data
 
-def get_istat_region_data():
+def get_istat_region_data(index="region_code"):
     """Returns data about Italian regions from ISTAT (Italian National Institute of Statistics).
     
     Parameters
     ----------
-    None
+    index : str
+        Choice of index for output DataFrame: region code numbers (options "r", "region", "region_code") or age ranges (options "a", "age", "age_range")(default is region code numbers)
     
     Raises
     ------
     ItaCovidLibConnectionError
         Raised when there are issues with Internet connection.
+    
+    ItaCovidLibArgumentError
+        Raised when improper arguments are passed to the function.
     
     Returns
     -------
@@ -829,7 +883,18 @@ def get_istat_region_data():
     
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-statistici-riferimento/popolazione-istat-regione-range.csv")
     if data is not None:
-        return data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","sigla_regione":"region_abbreviation","latitudine_regione":"lat","longitudine_regione":"long","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"})
+        # column names must be translated from Italian
+        data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","sigla_regione":"region_abbreviation","latitudine_regione":"lat","longitudine_regione":"long","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"}, inplace=True)
+        # there are two reasonable choices for this dataset DataFrame index. The user is let choose one of them.
+        if index=="r" or index=="region" or index=="region_code":
+            # for proper indexing
+            data.sort_values(by="region_code", inplace=True)
+            data.set_index("region_code", inplace=True)
+        elif index=="a" or index=="age" or index=="age_range":
+            data.set_index("age_range", inplace=True)
+        else:
+            raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
+        return data
 
 def tell_total_administered_doses():
     """Returns the amount of all administered doses ever.
