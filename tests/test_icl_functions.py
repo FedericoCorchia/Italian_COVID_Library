@@ -49,23 +49,38 @@ def test_getter_functions_cannot_connect():
             
 
 def test_istat_region_data_ranging():
-    istat_region_data = icl.get_istat_region_data()
-    assert len(istat_region_data["1":"5"].index) != 5
+    try:
+        istat_region_data = icl.get_istat_region_data()
+        assert len(istat_region_data["1":"5"].index) != 5
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
 
 def test_admin_sites_ranging():
-    admin_sites = icl.get_admin_sites()
-    assert len(admin_sites["1":"5"].index) != 5
+    try:
+        admin_sites = icl.get_admin_sites()
+        assert len(admin_sites["1":"5"].index) != 5
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
     
 def test_admin_sites_types_ranging():
-    admin_sites_types = icl.get_admin_sites_types()
-    assert len(admin_sites_types["1":"5"].index) != 5
+    try:
+        admin_sites_types = icl.get_admin_sites_types()
+        assert len(admin_sites_types["1":"5"].index) != 5
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
     
 def test_vaccine_summary_ranging():
-    vaccine_summary = icl.get_vaccine_summary()
-    assert len(vaccine_summary["1":"5"].index) == 6
+    try:
+        vaccine_summary = icl.get_vaccine_summary()
+        assert len(vaccine_summary["1":"5"].index) == 6
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
     
 def test_over_80_ranging():
-    over_80 = icl.get_over_80()
-    assert len(over_80["1":"5"].index) == 4
+    try:
+        over_80 = icl.get_over_80()
+        assert len(over_80["1":"5"].index) == 4
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
     
 
