@@ -40,12 +40,25 @@ def test_get_gets_correct_url_but_cannot_connect():
 
 def test_getter_functions_cannot_connect():
     # to be performed under no Internet connection.
-    functions = [icl.get_admin_sites, icl.get_admin_sites_types, icl.get_eligible, icl.get_equip_contracts, icl.get_equip_contracts_payments, icl.get_istat_region_data, icl.get_national_trend, icl.get_over_80, icl.get_province_cases, icl.get_region_cases, icl.get_vaccine_admin, icl.get_vaccine_admin_summary, icl.get_vaccine_ages, icl.get_vaccine_deliveries, icl.get_vaccine_summary]
+    functions = [icl.get_admin_sites, icl.get_admin_sites_types, icl.get_eligible, icl.get_equip_contracts, icl.get_equip_contracts_payments, icl.get_istat_region_data, icl.get_national_trend, icl.get_over_80, icl.get_province_cases, icl.get_region_cases, icl.get_vaccine_admin, icl.get_vaccine_admin_summary, icl.get_vaccine_ages, icl.get_vaccine_deliveries, icl.get_vaccine_summary, icl.get_istat_region_data]
     for function in functions:
         try:
             function()
         except Exception as e:
             assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+            
+def test_getter_functions_with_arguments_cannot_connect():
+    # to be performed under no Internet connection.
+    functions = [icl.get_national_trend, icl.get_region_cases, icl.get_province_cases]
+    for function in functions:
+        try:
+            function(latest=True)
+        except Exception as e:
+            assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+    try:
+        icl.get_istat_region_data(index="age_range")
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
             
 
 def test_istat_region_data_ranging():
