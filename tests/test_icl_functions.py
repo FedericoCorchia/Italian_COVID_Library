@@ -95,5 +95,28 @@ def test_over_80_ranging():
         assert len(over_80["1":"5"].index) == 4
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_prepare_for_plotting_on_map_incompatibilities():
+    try:
+        equip_contracts = icl.get_equip_contracts()
+        try:
+            icl.prepare_for_plotting_on_map(equip_contracts, on="region")
+        except Exception as e:
+            assert isinstance(e, KeyError)
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+
+
+def test_prepare_for_plotting_on_map_incompatibilities_2():
+    try:
+        region_cases = icl.get_region_cases()
+        try:
+            icl.prepare_for_plotting_on_map(region_cases, on="province")
+        except Exception as e:
+            assert isinstance(e, KeyError)
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+    
+
     
 
