@@ -102,7 +102,7 @@ def test_prepare_for_plotting_on_map_incompatibilities():
         try:
             icl.prepare_for_plotting_on_map(equip_contracts, on="region")
         except Exception as e:
-            assert isinstance(e, KeyError)
+            assert isinstance(e, icl_b.ItaCovidLibKeyError)
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
 
@@ -113,10 +113,8 @@ def test_prepare_for_plotting_on_map_incompatibilities_2():
         try:
             icl.prepare_for_plotting_on_map(region_cases, on="province")
         except Exception as e:
-            assert isinstance(e, KeyError)
+            assert isinstance(e, icl_b.ItaCovidLibKeyError)
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
-    
-
-    
+        
 

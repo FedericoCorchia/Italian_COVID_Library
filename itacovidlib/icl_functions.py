@@ -1110,17 +1110,23 @@ def prepare_for_plotting_on_map(source, on):
     if on=="region" or on=="regions" or on=="r":
         # file contains Italian regions with their borders
         italy_with_subdivisions = gpd.read_file("./regions_map.geojson")
-        # in this way, input DataFrame includes regional borders
-        source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
-        return source_with_geometry
+        try:
+            # in this way, input DataFrame includes regional borders
+            source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
+            return source_with_geometry
+        except KeyError:
+            raise icl_b.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with regions.") from None
     elif on=="province" or on=="provinces" or on=="p":
         # file contains Italian provinces with their borders
         italy_with_subdivisions = gpd.read_file("./provinces_map.geojson")
         # the following solves an issue with Sardinian provinces, which are not optimally described by the provinces file
         italy_with_subdivisions = italy_with_subdivisions.dissolve(by="province")
-        # in this way, input DataFrame includes province borders
-        source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="province", how="inner"))
-        return source_with_geometry
+        try:
+            # in this way, input DataFrame includes province borders
+            source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="province", how="inner"))
+            return source_with_geometry
+        except KeyError:
+            raise icl_b.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with provinces.") from None
     else:
         raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
 
