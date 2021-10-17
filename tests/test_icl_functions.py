@@ -50,22 +50,22 @@ def test_getter_functions_cannot_connect():
 
 def test_istat_region_data_ranging():
     istat_region_data = icl.get_istat_region_data()
-    assert len(istat_region_data[0:5].index) != 5
+    assert len(istat_region_data["1":"5"].index) != 5
 
 def test_admin_sites_ranging():
     admin_sites = icl.get_admin_sites()
-    assert len(admin_sites[0:5].index) != 5
+    assert len(admin_sites["1":"5"].index) != 5
     
 def test_admin_sites_types_ranging():
     admin_sites_types = icl.get_admin_sites_types()
-    assert len(admin_sites_types[0:5].index) != 5
+    assert len(admin_sites_types["1":"5"].index) != 5
     
 def test_vaccine_summary_ranging():
     vaccine_summary = icl.get_vaccine_summary()
-    assert len(vaccine_summary[0:5].index) == 6
+    assert len(vaccine_summary["1":"5"].index) == 6
     
 def test_over_80_ranging():
     over_80 = icl.get_over_80()
-    assert len(over_80[0:5].index) == 4
+    assert len(over_80["1":"5"].index) == 4
     
 

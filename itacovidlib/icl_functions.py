@@ -180,6 +180,10 @@ def get_admin_sites():
     if data is not None:
         # column names must be translated from Italian
         data.rename(columns={"area":"region_code","provincia":"province","comune":"municipality","presidio_ospedaliero":"place","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # for proper indexing
+        data.sort_values(by="ISTAT_region_code", inplace=True)
+        # for proper ranging operations (i.e. data[x:y]). Ints have issues in this
+        data["ISTAT_region_code"] = data["ISTAT_region_code"].apply(str)
         # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
         data.set_index("ISTAT_region_code", inplace=True)
         return data
@@ -222,6 +226,10 @@ def get_admin_sites_types():
     if data is not None:
         # column names must be translated from Italian
         data.rename(columns={"area":"region_code","denominazione_struttura":"place","tipologia":"type","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        # for proper indexing
+        data.sort_values(by="ISTAT_region_code", inplace=True)
+        # for proper ranging operations (i.e. data[x:y]). Ints have issues in this
+        data["ISTAT_region_code"] = data["ISTAT_region_code"].apply(str)
         # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
         data.set_index("ISTAT_region_code", inplace=True)
         return data
@@ -398,6 +406,8 @@ def get_vaccine_summary():
         data["last_update"] = pd.to_datetime(data["last_update"])
         # for proper indexing
         data.sort_values(by="ISTAT_region_code", inplace=True)
+        # for proper ranging operations (i.e. data[x:y]). Ints have issues in this
+        data["ISTAT_region_code"] = data["ISTAT_region_code"].apply(str)
         # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
         data.set_index("ISTAT_region_code", inplace=True)
         return data
@@ -829,6 +839,8 @@ def get_over_80():
         data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"}, inplace=True)
         # for proper indexing
         data.sort_values(by="region_code", inplace=True)
+        # for proper ranging operations (i.e. data[x:y]). Ints have issues in this
+        data["region_code"] = data["region_code"].apply(str)
         # for this dataset, this is the only reasonable choice, since ISTAT region codes are assigned from north to south, making a North-Centre-South distinction possible
         data.set_index("region_code", inplace=True)
         return data
@@ -889,8 +901,11 @@ def get_istat_region_data(index="region_code"):
         if index=="r" or index=="region" or index=="region_code":
             # for proper indexing
             data.sort_values(by="region_code", inplace=True)
+            # for proper ranging operations (i.e. data[x:y]). Ints have issues in this
+            data["region_code"] = data["region_code"].apply(str)
             data.set_index("region_code", inplace=True)
         elif index=="a" or index=="age" or index=="age_range":
+            data["region_code"] = data["region_code"].apply(str)
             data.set_index("age_range", inplace=True)
         else:
             raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
