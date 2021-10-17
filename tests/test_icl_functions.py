@@ -1,4 +1,5 @@
 import sys
+import geopandas
 from hypothesis import given
 import hypothesis.strategies as st
 
@@ -60,7 +61,6 @@ def test_getter_functions_with_arguments_cannot_connect():
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
             
-
 def test_istat_region_data_ranging():
     try:
         istat_region_data = icl.get_istat_region_data()
@@ -106,7 +106,6 @@ def test_prepare_for_plotting_on_map_incompatibilities():
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
 
-
 def test_prepare_for_plotting_on_map_incompatibilities_2():
     try:
         region_cases = icl.get_region_cases()
@@ -117,4 +116,9 @@ def test_prepare_for_plotting_on_map_incompatibilities_2():
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
         
-
+def test_prepare_for_plotting_on_map_output_is_geodataframe():
+    try:
+        region_cases_geodataframe = icl.prepare_for_plotting_on_map(source=icl.get_region_cases(), on="regions")
+        assert isinstance(region_cases_geodataframe, geopandas.geodataframe.GeoDataFrame)
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
