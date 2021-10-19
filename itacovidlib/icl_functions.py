@@ -102,6 +102,8 @@ def get_vaccine_deliveries():
         data.rename(columns={"area":"region_code","fornitore":"manufacturer","data_consegna":"date_of_delivery","numero_dosi":"number_of_doses","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
         # dates in column date_of_delivery must be parsed into datetime objects
         data["date_of_delivery"] = pd.to_datetime(data["date_of_delivery"])
+        # since date_of_delivery is meant to be the index, it is reasonable returned DataFrame is sorted by date, also for proper ranging
+        data.sort_values(by="date_of_delivery", inplace=True)
         data.set_index("date_of_delivery", inplace=True)
         return data
 
@@ -1099,13 +1101,22 @@ def tell_total_admin_points():
     if data is not None:
         return len(data.index)
 
-def tell_manufacturer_delivered_doses(manufacturer):
-    """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy. If string "all" is provided as parameter, it returns the number of delivered vaccine doses from all manufacturers.
+def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", stop_date="2030"):
+    """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy. If string "all" or no string is provided as parameter, it returns the number of delivered vaccine doses from all manufacturers.
+    
+    Numbers refer to the period between start_date and stop_date. If not specified, returned numbers refer to all time.
     
     Parameters
     ----------
     manufacturer : str
-        Vaccine manufacturer name or str "all". ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen". Str "all" triggers return of number of delivered doses from all manufacturers.
+        Vaccine manufacturer name or str "all". ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen". Str "all" triggers return of number of delivered doses from all manufacturers (default is "all").
+    
+    start_date : datetime
+        Starting date of the period of interest (default is beginning of vaccination cycle).
+        
+    stop_date : datetime
+        Ending date of the period of interest (default is current day).
+        
     
     Raises
     ------
@@ -1125,7 +1136,8 @@ def tell_manufacturer_delivered_doses(manufacturer):
     get_vaccine_deliveries : full data about vaccine deliveries per manufacturer"""
 
     # get_vaccine_deliveries() returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result. If the str "all" is provided, the function returns all delivered doses for all manufacturers.
-    data = get_vaccine_deliveries()
+    # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
+    data = get_vaccine_deliveries()[start_date:stop_date]
     if data is not None:
         if manufacturer=="all":
             all_delivered_doses = np.int64(data.sum()["number_of_doses"])
