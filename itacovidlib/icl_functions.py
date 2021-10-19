@@ -1271,7 +1271,5 @@ def tell_rt():
     # cases per day are returned by get_national_trend
     trend = get_national_trend()
     # covid19.r_covid requires dates without hours, minutes and seconds
-    trend["date"] = trend["date"].apply(datetime.datetime.date)
-    # covid19.r_covid also requires dates to be the indices
-    trend.set_index("date", inplace=True)
+    trend.index = trend.index.date
     return covid19.r_covid(trend["new_cases"])
