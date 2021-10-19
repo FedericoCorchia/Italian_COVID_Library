@@ -125,13 +125,17 @@ def get_eligible():
     DataFrame Columns
     -----------------
     region_code : str
-        Code of delivery region
+        Region code
     region : str
         Official region name
     age_group : str
         Age group
     population : int64
-        Total population per given age group"""
+        Total population per given age group
+        
+    See Also
+    --------
+    get_extra_dose_eligible : data about eligible persons for extra COVID-19 vaccine dose administration in Italy."""
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea.csv")
     if data is not None:
@@ -139,6 +143,46 @@ def get_eligible():
         data.rename(columns={"area":"region_code","nome_area":"region","fascia_anagrafica":"age_group","totale_popolazione":"population"}, inplace=True)
         data.set_index("age_group", inplace=True)
         return data
+    
+def get_extra_dose_eligible():
+    """Returns DataFrame about eligible persons for extra COVID-19 vaccine dose administration in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
+        
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas DataFrame with requested data.
+        
+    DataFrame Columns
+    -----------------
+    region_code : str
+        Region code
+    region : str
+        Official region name
+    prevailing_category : str
+        Prevailing category of the vaccination group in the corresponding row
+    population : int64
+        Total population per given vaccination group (i.e. row)
+    
+    See Also
+    --------
+    get_eligible: data about eligible persons for COVID-19 vaccine administration in Italy."""
+        
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea-dose-aggiuntiva.csv")
+    if data is not None:
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","nome_area":"region","categoria_prevalente":"prevailing_category","totale_popolazione":"population"}, inplace=True)
+        data.set_index("region_code", inplace=True)
+        return data
+        
 
 def get_admin_sites():
     """Returns DataFrame about COVID-19 vaccine administrations points in Italy.
