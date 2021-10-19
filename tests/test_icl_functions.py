@@ -122,3 +122,88 @@ def test_prepare_for_plotting_on_map_output_is_geodataframe():
         assert isinstance(region_cases_geodataframe, geopandas.geodataframe.GeoDataFrame)
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_total_vaccinated_1():
+    try:
+        total_vaccinated_ever = icl.tell_total_vaccinated(1)
+        vaccinated_first_group = icl.tell_total_vaccinated(1, stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated(1, start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated(1, start_date="2020-10-04")
+        assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_total_vaccinated_2():
+    try:
+        total_vaccinated_ever = icl.tell_total_vaccinated(2)
+        vaccinated_first_group = icl.tell_total_vaccinated(2, stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated(2, start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated(2, start_date="2020-10-04")
+        assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_total_vaccinated_3():
+    try:
+        total_vaccinated_ever = icl.tell_total_vaccinated(3)
+        vaccinated_first_group = icl.tell_total_vaccinated(3, stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated(3, start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated(3, start_date="2020-10-04")
+        assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+
+def test_tell_manufacturer_delivered_doses_all():
+    try:
+        manufacturer="all"
+        total_delivered_ever = icl.tell_manufacturer_delivered_doses(manufacturer)
+        delivered_first_group = icl.tell_manufacturer_delivered_doses(manufacturer, stop_date="2020-10-01")
+        delivered_second_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-02", stop_date="2020-10-03")
+        delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
+        assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_manufacturer_delivered_doses_pfizer():
+    try:
+        manufacturer="Pfizer/BioNTech"
+        total_delivered_ever = icl.tell_manufacturer_delivered_doses(manufacturer)
+        delivered_first_group = icl.tell_manufacturer_delivered_doses(manufacturer, stop_date="2020-10-01")
+        delivered_second_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-02", stop_date="2020-10-03")
+        delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
+        assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_manufacturer_delivered_doses_moderna():
+    try:
+        manufacturer="Moderna"
+        total_delivered_ever = icl.tell_manufacturer_delivered_doses(manufacturer)
+        delivered_first_group = icl.tell_manufacturer_delivered_doses(manufacturer, stop_date="2020-10-01")
+        delivered_second_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-02", stop_date="2020-10-03")
+        delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
+        assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_manufacturer_delivered_doses_astrazeneca():
+    try:
+        manufacturer="Vaxzevria (AstraZeneca)"
+        total_delivered_ever = icl.tell_manufacturer_delivered_doses(manufacturer)
+        delivered_first_group = icl.tell_manufacturer_delivered_doses(manufacturer, stop_date="2020-10-01")
+        delivered_second_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-02", stop_date="2020-10-03")
+        delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
+        assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        
+def test_tell_manufacturer_delivered_doses_janssen():
+    try:
+        manufacturer="Janssen"
+        total_delivered_ever = icl.tell_manufacturer_delivered_doses(manufacturer)
+        delivered_first_group = icl.tell_manufacturer_delivered_doses(manufacturer, stop_date="2020-10-01")
+        delivered_second_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-02", stop_date="2020-10-03")
+        delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
+        assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
+    except Exception as e:
+        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
