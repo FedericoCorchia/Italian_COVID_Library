@@ -981,11 +981,13 @@ def tell_total_administered_doses():
         # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
         return int(data["administered_doses"].sum())
 
-def tell_total_vaccinated(dose_number, option="n"):
+def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date="2030"):
     """Depending on the int value provided as dose_number:
     dose_number = 1: returns the number of individuals who have been injected at least one vaccine dose in Italy (independently of it being enough for vaccination cycle completion, as is the case with Janssen vaccine or for individuals with recent COVID-19 injection, for whom only one dose is required;
     dose_number = 2: returns the number of individuals who have completed the vaccination cycle in Italy (with double dose for Pfizer/BioNTech, Moderna and Vaxzevria (AstraZeneca), with single dose for Janssen, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination;
     dose_number = 3: returns the number of individuals who have been injected an extra dose of vaccine in Italy, being eligible for it depending on their medical condition (commonly referred to as "third dose" in media).
+    
+    Numbers refer to the period between start_date and stop_date. If not specified, returned numbers refer to all time.
     
     Result is returned, depending on the str value provided as option:
     no option or option = "n" or "number": just returns the requested number (default option);
@@ -999,6 +1001,12 @@ def tell_total_vaccinated(dose_number, option="n"):
     
     option : str
         Output option. See above for the meaning of the various option codes. Other str values yield an error.
+        
+    start_date : datetime
+        Starting date of the period of interest (default is beginning of vaccination cycle).
+        
+    stop_date : datetime
+        Ending date of the period of interest (default is current day)
     
     Raises
     ------
@@ -1025,7 +1033,8 @@ def tell_total_vaccinated(dose_number, option="n"):
     if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p":
         raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
     else:
-        vaccine_admin = get_vaccine_admin()
+        # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
+        vaccine_admin = get_vaccine_admin()[start_date:stop_date]
         if vaccine_admin is not None:
             if dose_number == 1:
                 # Previously infected individuals data are also added, since the DataFrame returned by get_vaccine_admin() keeps them separate from first doses count
