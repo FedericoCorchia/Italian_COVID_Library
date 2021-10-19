@@ -1142,12 +1142,11 @@ def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", sto
         if manufacturer=="all":
             all_delivered_doses = np.int64(data.sum()["number_of_doses"])
             return all_delivered_doses
-        else:
+        elif manufacturer=="Pfizer/BioNTech" or manufacturer=="Moderna" or manufacturer=="Vaxzevria (AstraZeneca)" or manufacturer=="Janssen":
             manufacturer_delivered_doses = np.int64(data[data["manufacturer"]==manufacturer].sum()["number_of_doses"])
-            if manufacturer_delivered_doses == 0:
-                raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/Biontech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
-            else:
-                return manufacturer_delivered_doses
+            return manufacturer_delivered_doses
+        else:
+            raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
 
 def prepare_for_plotting_on_map(source, on):
     """Makes any Italian COVID Library generated DataFrame compatible with geopandas, for subsequent plotting on a map with Italian regions or provinces (depending on the option "on" specified).
