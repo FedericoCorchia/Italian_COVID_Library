@@ -20,9 +20,9 @@ After cloning the repository, you may directly implement all of the above with t
 `conda env create -f itacovidlib_env.yml`
 
 ## Usage
-Instructions on using Italian_COVID_Library, also including practical tutorials:
+Instructions on using Italian_COVID_Library, also including practical examples:
 
-MANUAL PAGES YET TO BE CREATED
+[Italian COVID Library Tutorial](https://github.com/FedericoCorchia/Italian_COVID_Library/blob/main/Tutorial.ipynb)
 
 ## Data Sources
 For data on COVID-19 cases in Italy: [pcm-dpc/COVID-19](https://github.com/pcm-dpc/COVID-19) - "COVID-19 Italia - Monitoraggio situazione" by Dipartimento della Protezione Civile
