@@ -16,5 +16,4 @@ setup(
     url='https://github.com/FedericoCorchia/Italian_COVID_Library'
     long_description=read('README.md')
     install_requires=['numpy', 'pandas', 'geopandas', 'requests', 'epyestim'],
-    tests_require=['hypothesis'],
 )
