@@ -1,4 +1,6 @@
 # Italian_COVID_Library
+![Italian COVID Library logo](https://github.com/FedericoCorchia/Italian_COVID_Library/blob/main/logo.png)
+
 A Python library for COVID-19 infections and vaccinations in Italy data retrieval and analysis.
 
 ## Installing Italian_COVID_Library
