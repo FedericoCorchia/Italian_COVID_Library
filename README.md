@@ -8,11 +8,12 @@ Simply clone this repository and use it as a normal Python package:
 
 ## Requirements
 Functioning of Italian_COVID_Library requires the following:
-- Python (guaranteed for version 3.8.5 or higher, TO BE CHECKED FOR PREVIOUS VERSIONS)
+- Python (3.8.1 or higher)
 - numpy
-- pandas
-- geopandas
+- pandas (1.2.0 or higher)
+- geopandas (0.7.0 or higher)
 - requests
+- epyestim
 - setuptools
 
 After cloning the repository, you may directly implement all of the above with the following command, which creates a specific Conda environment for Italian_COVID_Library with all dependencies, downloading them if needed:
