@@ -8,4 +8,6 @@ dependencies:
  - pandas
  - geopandas
  - requests
+ - epyestim
  - setuptools
+ - hypothesis
