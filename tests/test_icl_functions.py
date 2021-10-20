@@ -1,15 +1,12 @@
 import sys
 import geopandas
-from hypothesis import given
-import hypothesis.strategies as st
 
 sys.path.append("../itacovidlib")
 import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl
 
-@given(fake_site_name=st.text(min_size=1, alphabet=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","u","v","w","x","y","z","_","-"]))
-def test_get_gets_fake_url(fake_site_name):
+def test_get_gets_fake_url():
     try:
-        icl_b._get("http://"+fake_site_name)
+        icl_b._get("http://fakeurl")
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
 
