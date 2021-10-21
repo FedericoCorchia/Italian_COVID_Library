@@ -59,10 +59,10 @@ def test_admin_sites_types_ranging():
     except Exception as e:
         assert isinstance(e, icl_b.ItaCovidLibConnectionError)
     
-def test_vaccine_summary_ranging():
-    """Tests whether ranging in DataFrame returned by icl.get_vaccine_summary works properly."""
+def test_vaccine_general_summary_ranging():
+    """Tests whether ranging in DataFrame returned by icl.get_vaccine_general_summary works properly."""
     try:
-        vaccine_summary = icl.get_vaccine_summary()
+        vaccine_summary = icl.get_vaccine_general_summary()
         # there should be 6 rows
         assert len(vaccine_summary["1":"5"].index) == 6
     except Exception as e:

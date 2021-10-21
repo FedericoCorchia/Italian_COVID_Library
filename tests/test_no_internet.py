@@ -52,7 +52,7 @@ def test_get_gets_correct_url_but_cannot_connect():
 def test_getter_functions_cannot_connect():
     """Tests whether connection errors raised by icl_b._get propagate correctly and are yielded by get_<resource_name> functions, all using icl_b._get."""
     # to be performed under no Internet connection.
-    functions = [icl.get_admin_sites, icl.get_admin_sites_types, icl.get_eligible, icl.get_equip_contracts, icl.get_equip_contracts_payments, icl.get_extra_dose_eligible, icl.get_istat_region_data, icl.get_national_trend, icl.get_over_80, icl.get_province_cases, icl.get_region_cases, icl.get_vaccine_admin, icl.get_vaccine_admin_summary, icl.get_vaccine_ages, icl.get_vaccine_deliveries, icl.get_vaccine_summary, icl.get_istat_region_data]
+    functions = [icl.get_admin_sites, icl.get_admin_sites_types, icl.get_eligible, icl.get_equip_contracts, icl.get_equip_contracts_payments, icl.get_extra_dose_eligible, icl.get_istat_region_data, icl.get_national_trend, icl.get_over_80, icl.get_province_cases, icl.get_region_cases, icl.get_vaccine_admin, icl.get_vaccine_admin_summary, icl.get_vaccine_ages, icl.get_vaccine_deliveries, icl.get_vaccine_general_summary, icl.get_istat_region_data]
     for function in functions:
         try:
             function()

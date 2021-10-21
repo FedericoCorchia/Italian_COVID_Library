@@ -395,7 +395,7 @@ def get_vaccine_admin_summary():
         data.set_index("date", inplace=True)
         return data
     
-def get_vaccine_summary():
+def get_vaccine_general_summary():
     """Returns DataFrame with a synthesis of COVID-19 vaccines deliveries and administrations in Italy.
     
     Parameters
@@ -975,11 +975,11 @@ def tell_total_administered_doses():
     
     See Also
     --------
-    get_vaccine_summary : also includes regional data"""
+    get_vaccine_general_summary : also includes regional data"""
     
-    data = get_vaccine_summary()
+    data = get_vaccine_general_summary()
     if data is not None:
-        # get_vaccine_summary_latest also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
+        # get_vaccine_general_summary_latest also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
         return int(data["administered_doses"].sum())
 
 def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date="2030"):
