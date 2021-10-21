@@ -8,7 +8,7 @@ class ItaCovidLibArgumentError(Exception): pass
 class ItaCovidLibKeyError(KeyError): pass
 
 def _get(url):
-    """Returns a dataframe from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name>() functions.
+    """Returns a DataFrame from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name> functions.
     
     Parameters
     ----------
@@ -23,11 +23,11 @@ def _get(url):
     Returns
     -------
     pandas.core.frame.DataFrame
-        Pandas dataframe with the data from the .csv file at which url points.
+        Pandas DataFrame with the data from the .csv file at which url points.
     
     See Also
     --------
-    Any function whose name begins with get_ : uses _get(url)"""
+    Any function whose name begins with "get_" : uses _get"""
 
     try:
         downloaded_content = requests.get(url).content

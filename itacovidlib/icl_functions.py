@@ -7,11 +7,6 @@ import geopandas as gpd
 import epyestim.covid19 as covid19
 import datetime
 
-# ====================================================================================
-# FOR ALL get_<resource_name>() FUNCTIONS
-#
-# .rename(columns={...}) translates column names (originally in Italian) into English.
-# ====================================================================================
 
 def get_vaccine_ages():
     """Returns DataFrame about COVID-19 vaccine administrations per age group in Italy.
@@ -41,7 +36,7 @@ def get_vaccine_ages():
     females : int64
         Total of female persons to which vaccine has been administered
     first_dose : int64
-        Number of first doses
+        Number of first doses (excluding previously infected individuals)
     second_dose : int64
         Number of second doses
     previously_infected : int64
@@ -312,11 +307,11 @@ def get_vaccine_admin():
     females : int64
         Number of female individuals who have been given the vaccine
     first_dose : int64
-        Number of first doses
+        Number of first doses (excluding previously infected individuals)
     second_dose : int64
         Number of second doses
     previously_infected : int64
-        Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+        Number of vaccine administrations to individuals who have already been infected by SARS-CoV-2 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
     NUTS1_code : str
@@ -367,15 +362,15 @@ def get_vaccine_admin_summary():
     total : int64
         Total amount of doses
     males : int64
-        Number of male individuals who have been given the vaccine
+        Number of male individuals who have been given a vaccine dose
     females : int64
-        Number of female individuals who have been given the vaccine
+        Number of female individuals who have been given a vaccine dose
     first_dose : int64
-        Number of first doses
+        Number of first doses (excluding previously infected individuals)
     second_dose : int64
         Number of second doses
     previously_infected : int64
-        Number of vaccine administrations to individuals who have already been infected by COVID-19 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
+        Number of vaccine administrations to individuals who have already been infected by SARS-CoV-2 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
     NUTS1_code : str
@@ -499,7 +494,7 @@ def get_national_trend(latest=False):
     recovered_released : int64
         Number of individuals released from hospital after recovery
     deaths : int64
-        Number of individuals died following COVID-19 infection
+        Number of dead individuals following COVID-19 infection
     cases_from_clinical_suspects : float64
         Number of positive cases found after report of COVID-19-like symptoms
     cases_from_screening : float64
@@ -793,7 +788,7 @@ def get_region_cases(latest=False):
     recovered_released : int64
         Number of individuals released from hospital after recovery
     deaths : int64
-        Number of individuals died following COVID-19 infection
+        Number of dead individuals following COVID-19 infection
     cases_from_clinical_suspects : float64
         Number of positive cases found after report of COVID-19-like symptoms
     cases_from_screening : float64
@@ -897,7 +892,7 @@ def get_istat_region_data(index="region_code"):
     Parameters
     ----------
     index : str
-        Choice of index for output DataFrame: region code numbers (options "r", "region", "region_code") or age ranges (options "a", "age", "age_range")(default is region code numbers)
+        Choice of index for output DataFrame: region code numbers (options "r", "region", "region_code") or age ranges (options "a", "age", "age_range")(default is "region_code")
     
     Raises
     ------
@@ -954,7 +949,7 @@ def get_istat_region_data(index="region_code"):
             data["region_code"] = data["region_code"].apply(str)
             data.set_index("age_range", inplace=True)
         else:
-            raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
+            raise icl_b.ItaCovidLibArgumentError("invalid option for index. Please see documentation for help on possible options.")
         return data
 
 def tell_total_administered_doses():
@@ -980,34 +975,33 @@ def tell_total_administered_doses():
     
     data = get_vaccine_summary()
     if data is not None:
-        # get_vaccine_summary_latest() also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
+        # get_vaccine_summary_latest also returns a column administered_doses, with the amount of all doses ever administered per region. Sum is performed on all regional values.
         return int(data["administered_doses"].sum())
 
 def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date="2030"):
     """Depending on the int value provided as dose_number:
-    dose_number = 1: returns the number of individuals who have been injected at least one vaccine dose in Italy (independently of it being enough for vaccination cycle completion, as is the case with Janssen vaccine or for individuals with recent COVID-19 injection, for whom only one dose is required;
-    dose_number = 2: returns the number of individuals who have completed the vaccination cycle in Italy (with double dose for Pfizer/BioNTech, Moderna and Vaxzevria (AstraZeneca), with single dose for Janssen, with single dose for individuals previously infected with COVID-19 between 3 and 6 months before vaccination;
+    dose_number = 1: returns the number of individuals who have been injected at least one vaccine dose in Italy (independently of it being enough for vaccination cycle completion, as is the case with Janssen vaccine or for individuals with recent COVID-19 injection, for whom only one dose is required);
+    dose_number = 2: returns the number of individuals who have completed the vaccination cycle in Italy (with double dose for Pfizer/BioNTech, Moderna and Vaxzevria (AstraZeneca), with single dose for Janssen, with single dose for individuals previously infected with SARS-CoV-2 between 3 and 6 months before vaccination);
     dose_number = 3: returns the number of individuals who have been injected an extra dose of vaccine in Italy, being eligible for it depending on their medical condition (commonly referred to as "third dose" in media).
     
-    Numbers refer to the period between start_date and stop_date. If not specified, returned numbers refer to all time.
+    Numbers refer to the period between start_date and stop_date. If start_date and stop_date are not specified, returned numbers refer to all time.
     
     Result is returned, depending on the str value provided as option:
     no option or option = "n" or "number": just returns the requested number (default option);
     option = "o" or "over12": returns the requested number as a fraction of the Italian population aged over 12;
     option = "p" or "population": returns the requested number as a fraction of the whole Italian population.
     
+    WARNING: function might take a while before returning!
+    
     Parameters
     ----------
     dose_number : int
-        Dose number of interest. See above for the meaning of dose_number = 1, 2 or 3. Other int values yield an error.
-    
+        Dose number of interest. See above for the meaning of dose_number = 1, 2 or 3. Other int values raise an error.
     option : str
-        Output option. See above for the meaning of the various option codes. Other str values yield an error.
-        
-    start_date : datetime
-        Starting date of the period of interest (default is beginning of vaccination cycle).
-        
-    stop_date : datetime
+        Output option. See above for the meaning of the various option codes. Other str values raise an error.
+    start_date : datetime or datetime-like formatted str
+        Starting date of the period of interest (default is beginning of vaccination cycle).  
+    stop_date : datetime or datetime-like formatted str
         Ending date of the period of interest (default is current day)
     
     Raises
@@ -1021,25 +1015,25 @@ def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date=
     Returns
     -------
     FOR THE DEFAULT OPTION:
-    numpy.int64
-        NumPy integer (see above for its meaning, depending on dose_number code).
+    int64
+        64-bit integer (see above for its meaning, depending on dose_number code).
     
     FOR THE OTHER OPTIONS:
-    numpy.float64
-        NumPy floating point (see above for its meaning, depending on dose_number code and option code).
+    float64
+        64-bit floating point (see above for its meaning, depending on dose_number code and option code).
     
     See Also
     --------
     get_vaccine_admin : full data about vaccine administration in Italy"""
 
     if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p":
-        raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
+        raise icl_b.ItaCovidLibArgumentError("invalid option for option. Please see documentation for help on possible options.")
     else:
         # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
         vaccine_admin = get_vaccine_admin()[start_date:stop_date]
         if vaccine_admin is not None:
             if dose_number == 1:
-                # Previously infected individuals data are also added, since the DataFrame returned by get_vaccine_admin() keeps them separate from first doses count
+                # Previously infected individuals data are also added, since the DataFrame returned by get_vaccine_admin keeps them separate from first doses count
                 vaccinated = vaccine_admin.sum()["first_dose"]+vaccine_admin.sum()["previously_infected"]
                 if option=="number" or option=="n":
                     return vaccinated
@@ -1071,7 +1065,7 @@ def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date=
                     total_population = get_istat_region_data().sum()["total"]
                     return vaccinated/total_population
             else:
-                raise icl_b.ItaCovidLibArgumentError("unvalid number code. Please see documentation for help on possible number codes.")
+                raise icl_b.ItaCovidLibArgumentError("invalid option for dose_number. Please see documentation for help on possible options.")
 
 
 def tell_total_admin_points():
@@ -1096,7 +1090,7 @@ def tell_total_admin_points():
     get_admin_sites : returns specific info on vaccine administration points
     get_admin_sites_types : returns vaccine administration points types"""
 
-    # get_admin_sites_types() returns all administration points, one per row
+    # get_admin_sites_types returns all administration points, one per row
     data = get_admin_sites_types()
     if data is not None:
         return len(data.index)
@@ -1104,20 +1098,17 @@ def tell_total_admin_points():
 def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", stop_date="2030"):
     """Returns the number of delivered vaccine doses from the manufacturer given as a parameter in Italy. If string "all" or no string is provided as parameter, it returns the number of delivered vaccine doses from all manufacturers.
     
-    Numbers refer to the period between start_date and stop_date. If not specified, returned numbers refer to all time.
+    Numbers refer to the period between start_date and stop_date. If start_date and stop_date are not specified, returned numbers refer to all time.
     
     Parameters
     ----------
     manufacturer : str
         Vaccine manufacturer name or str "all". ONLY ACCEPTED MANUFACTURERS AND SPELLINGS ARE "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" AND "Janssen". Str "all" triggers return of number of delivered doses from all manufacturers (default is "all").
-    
-    start_date : datetime
+    start_date : datetime or datetime-like formatted str
         Starting date of the period of interest (default is beginning of vaccination cycle).
-        
-    stop_date : datetime
+    stop_date : datetime or datetime-like formatted str
         Ending date of the period of interest (default is current day).
-        
-    
+
     Raises
     ------
     ItaCovidLibConnectionError
@@ -1128,14 +1119,14 @@ def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", sto
     
     Returns
     -------
-    numpy.int64
-        Number of delivered vaccine doses from chosen manufacturer or all manufacturers, according to parameter
+    int64
+        Number of delivered vaccine doses from chosen manufacturer or all manufacturers, according to parameter "manufacturer"
     
     See Also
     --------
     get_vaccine_deliveries : full data about vaccine deliveries per manufacturer"""
 
-    # get_vaccine_deliveries() returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result. If the str "all" is provided, the function returns all delivered doses for all manufacturers.
+    # get_vaccine_deliveries returns all delivered doses per day and per manufacturer in a DataFrame. A sum must be performed over days for the chosen manufacturer. np.int64() to avoid a numpy.float64 obj being produced in case of null result. If str "all" is provided, the function returns all delivered doses for all manufacturers.
     # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
     data = get_vaccine_deliveries()[start_date:stop_date]
     if data is not None:
@@ -1149,24 +1140,27 @@ def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", sto
             raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
 
 def prepare_for_plotting_on_map(source, on):
-    """Makes any Italian COVID Library generated DataFrame compatible with geopandas, for subsequent plotting on a map with Italian regions or provinces (depending on the option "on" specified).
+    """Makes any Italian COVID Library generated DataFrame with geographical data compatible with geopandas, for subsequent plotting on a map with Italian regions or provinces (depending on the option "on" specified).
     
     Parameters
     ----------
     source : pandas.core.frame.DataFrame
-        Pandas DataFrame, with the data to plot, to make compatible with geopandas. Only Italian COVID Library generated DataFrames are guaranteed to work.
+        Pandas DataFrame, with the data to plot, to make compatible with geopandas. Only Italian COVID Library generated DataFrames with geographical data compatible with the option "on" provided are guaranteed to work.
     on : str
         Option for choosing local subdivisions for plotting: regions (options "region", "regions" or "r") or provinces (options "province", "provinces" or "p")
     
     Raises
     ------
+    ItaCovidLibKeyError
+        Raised when DataFrame cannot be converted into GeoDataFrame (because the required "region" or "province" column with local subdivision data is missing).
+    
     ItaCovidLibArgumentError
         Raised when improper arguments are passed to the function.
     
     Returns
     -------
     geopandas.geodataframe.GeoDataFrame
-        GeoPandas DataFrame, the Pandas DataFrame given as argument made compatible with GeoPandas.
+        GeoPandas DataFrame, the Pandas DataFrame given as an argument made compatible with GeoPandas.
     
     See Also
     --------
@@ -1192,7 +1186,7 @@ def prepare_for_plotting_on_map(source, on):
         except KeyError:
             raise icl_b.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with provinces.") from None
     else:
-        raise icl_b.ItaCovidLibArgumentError("unvalid option. Please see documentation for help on possible options.")
+        raise icl_b.ItaCovidLibArgumentError("invalid option on. Please see documentation for help on possible options.")
 
 def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     """Plots data on a map of Italy with regions or provinces, depending on the option "on" specified.
@@ -1200,7 +1194,7 @@ def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     Parameters
     ----------
     source : pandas.core.frame.DataFrame
-        Pandas DataFrame with the data to plot. Only Italian COVID Library generated DataFrames are guaranteed to work.
+        Pandas DataFrame with the data to plot. Only Italian COVID Library generated DataFrames with geographical data compatible with the option "on" provided are guaranteed to work.
     on : str
         Option for choosing local subdivisions for plotting: regions (options "region", "regions" or "r") or provinces (options "province", "provinces" or "p")
     column : str
@@ -1210,10 +1204,13 @@ def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     legend : bool
         Displays or not a legend (default is True)
     cmap : str
-        Code name of the color palette for plotting (for the list of codes see matplotlib.org/stable/tutorials/colors/colormaps)(default is "viridis")
+        Code name of the color palette for plotting (for the list of codes please see matplotlib.org/stable/tutorials/colors/colormaps)(default is "viridis")
     
     Raises
-    ------
+    ------ 
+    ItaCovidLibKeyError
+        Raised when DataFrame cannot be converted into GeoDataFrame (because the required "region" or "province" column with local subdivision data is missing).
+        
     ItaCovidLibArgumentError
         Raised when improper arguments are passed to the function.
     
@@ -1224,7 +1221,7 @@ def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     
     See Also
     --------
-    prepare_for_plotting_on_map: only turns the Pandas DataFrame given as argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
+    prepare_for_plotting_on_map: only turns the Pandas DataFrame given as an argument to a GeoPandas compatible GeoDataFrame, for subsequent plotting. Use this function if you need the full customization and editing potential of GeoPandas."""
     # with the following function, input DataFrame can be plotted on a map correctly
     data_to_plot = prepare_for_plotting_on_map(source, on)
     plot = data_to_plot.plot(column, legend=legend, cmap=cmap)
@@ -1252,17 +1249,17 @@ def tell_rt():
     
     DataFrame Columns
     -----------------
-    cases : numpy.float64
+    cases : float64
         Number of new cases on given date
-    R_mean : numpy.float64
+    R_mean : float64
         Rt best value
-    R_var : numpy.float64
+    R_var : float64
         Variance on R_mean
-    Q0.025 : numpy.float64
+    Q0.025 : float64
         Rt quantile at 0.025
-    Q0.5 : numpy.float64
+    Q0.5 : float64
         Rt quantile at 0.5
-    Q0.975 : numpy.float64
+    Q0.975 : float64
         Rt quantile at 0.975
     
     See Also
