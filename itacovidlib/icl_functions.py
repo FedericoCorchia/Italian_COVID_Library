@@ -938,6 +938,8 @@ def get_istat_region_data(index="region_code"):
     if data is not None:
         # column names must be translated from Italian
         data.rename(columns={"codice_regione":"region_code","codice_nuts_1":"NUTS1_code","descrizione_nuts_1":"NUTS1_description","codice_nuts_2":"NUTS2_code","denominazione_regione":"region","sigla_regione":"region_abbreviation","latitudine_regione":"lat","longitudine_regione":"long","range_eta":"age_range","totale_genere_maschile":"males","totale_genere_femminile":"females","totale_generale":"total"}, inplace=True)
+        # solves an issue with Trentino and South Tyrol region codes
+        data["region_code"].replace({21:4, 22:4}, inplace=True)
         # there are two reasonable choices for this dataset DataFrame index. The user is let choose one of them.
         if index=="r" or index=="region" or index=="region_code":
             # for proper indexing
@@ -947,6 +949,8 @@ def get_istat_region_data(index="region_code"):
             data.set_index("region_code", inplace=True)
         elif index=="a" or index=="age" or index=="age_range":
             data["region_code"] = data["region_code"].apply(str)
+            # for proper indexing
+            data.sort_values(by="age_range", inplace=True)
             data.set_index("age_range", inplace=True)
         else:
             raise icl_b.ItaCovidLibArgumentError("invalid option for index. Please see documentation for help on possible options.")
