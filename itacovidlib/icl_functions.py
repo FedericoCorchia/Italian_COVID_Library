@@ -1280,4 +1280,6 @@ def tell_rt():
     rt_data = covid19.r_covid(trend["new_cases"])
     # index column must be given a name
     rt_data.index.name = "date"
+    # for proper indexing and ranging
+    rt_data.index = pd.to_datetime(rt_data.index)
     return rt_data
