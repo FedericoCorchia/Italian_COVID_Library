@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../itacovidlib")
-import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl
+import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl, itacovidlib.icl_exceptions as icl_e
 
 ################################################################################################
 # NOTE ON TESTING
@@ -20,7 +20,7 @@ def test_get_gets_fake_url_without_internet():
     try:
         icl_b._get("http://fakeurl")
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
 
 def test_get_gets_correct_url_but_cannot_connect():
     """Tests whether icl_b._get raises the proper exception when it cannot connect to the URLs with the data to gather."""
@@ -47,7 +47,7 @@ def test_get_gets_correct_url_but_cannot_connect():
         try:
             icl_b._get(link)
         except Exception as e:
-            assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+            assert isinstance(e, icl_e.ItaCovidLibConnectionError)
 
 def test_getter_functions_cannot_connect():
     """Tests whether connection errors raised by icl_b._get propagate correctly and are yielded by get_<resource_name> functions, all using icl_b._get."""
@@ -57,4 +57,4 @@ def test_getter_functions_cannot_connect():
         try:
             function()
         except Exception as e:
-            assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+            assert isinstance(e, icl_e.ItaCovidLibConnectionError)

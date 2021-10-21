@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../itacovidlib")
 import itacovidlib.icl_backend as icl_b
+import itacovidlib.icl_exceptions as icl_e
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -954,7 +955,7 @@ def get_istat_region_data(index="region_code"):
             data.sort_values(by="age_range", inplace=True)
             data.set_index("age_range", inplace=True)
         else:
-            raise icl_b.ItaCovidLibArgumentError("invalid option for index. Please see documentation for help on possible options.")
+            raise icl_e.ItaCovidLibArgumentError("invalid option for index. Please see documentation for help on possible options.")
         return data
 
 def tell_total_administered_doses():
@@ -1032,7 +1033,7 @@ def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date=
     get_vaccine_admin : full data about vaccine administration in Italy"""
 
     if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p":
-        raise icl_b.ItaCovidLibArgumentError("invalid option for option. Please see documentation for help on possible options.")
+        raise icl_e.ItaCovidLibArgumentError("invalid option for option. Please see documentation for help on possible options.")
     else:
         # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
         vaccine_admin = get_vaccine_admin()[start_date:stop_date]
@@ -1070,7 +1071,7 @@ def tell_total_vaccinated(dose_number, option="n", start_date="2020", stop_date=
                     total_population = get_istat_region_data().sum()["total"]
                     return vaccinated/total_population
             else:
-                raise icl_b.ItaCovidLibArgumentError("invalid option for dose_number. Please see documentation for help on possible options.")
+                raise icl_e.ItaCovidLibArgumentError("invalid option for dose_number. Please see documentation for help on possible options.")
 
 
 def tell_total_admin_points():
@@ -1142,7 +1143,7 @@ def tell_manufacturer_delivered_doses(manufacturer="all", start_date="2020", sto
             manufacturer_delivered_doses = np.int64(data[data["manufacturer"]==manufacturer].sum()["number_of_doses"])
             return manufacturer_delivered_doses
         else:
-            raise icl_b.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
+            raise icl_e.ItaCovidLibArgumentError('no vaccine manufacturer recognized with name "{}". Only accepted names and spellings are "Pfizer/BioNTech", "Moderna", "Vaxzevria (AstraZeneca)" and "Janssen".'.format(manufacturer))
 
 def prepare_for_plotting_on_map(source, on):
     """Makes any Italian COVID Library generated DataFrame with geographical data compatible with geopandas, for subsequent plotting on a map with Italian regions or provinces (depending on the option "on" specified).
@@ -1178,7 +1179,7 @@ def prepare_for_plotting_on_map(source, on):
             source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
             return source_with_geometry
         except KeyError:
-            raise icl_b.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with regions.") from None
+            raise icl_e.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with regions.") from None
     elif on=="province" or on=="provinces" or on=="p":
         # file contains Italian provinces with their borders
         italy_with_subdivisions = gpd.read_file("./provinces_map.geojson")
@@ -1189,9 +1190,9 @@ def prepare_for_plotting_on_map(source, on):
             source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="province", how="inner"))
             return source_with_geometry
         except KeyError:
-            raise icl_b.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with provinces.") from None
+            raise icl_e.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with provinces.") from None
     else:
-        raise icl_b.ItaCovidLibArgumentError("invalid option on. Please see documentation for help on possible options.")
+        raise icl_e.ItaCovidLibArgumentError("invalid option on. Please see documentation for help on possible options.")
 
 def plot_on_map(source, on, column, title="", legend=True, cmap="Reds"):
     """Plots data on a map of Italy with regions or provinces, depending on the option "on" specified.

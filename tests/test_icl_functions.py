@@ -1,7 +1,7 @@
 import sys
 import geopandas
 sys.path.append("../itacovidlib")
-import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl
+import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl, itacovidlib.icl_exceptions as icl_e
 
 ################################################################################################
 # NOTE ON TESTING
@@ -27,7 +27,7 @@ def test_get_gets_fake_url_with_internet():
     try:
         icl_b._get("http://fakeurl")
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
             
 def test_istat_region_data_ranging():
     """Tests whether ranging in DataFrame returned by icl.get_istat_region_data works properly."""
@@ -37,7 +37,7 @@ def test_istat_region_data_ranging():
         # if there are indeed, it means it still ranges by "default index number" (i.e the default index numbers given to a DataFrame) and the test fails
         assert len(istat_region_data["1":"5"].index) != 5
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
 
 def test_admin_sites_ranging():
     """Tests whether ranging in DataFrame returned by icl.get_admin_sites works properly."""
@@ -47,7 +47,7 @@ def test_admin_sites_ranging():
         # if there are indeed, it means it still ranges by "default index number" (i.e the default index numbers given to a DataFrame) and the test fails
         assert len(admin_sites["1":"5"].index) != 5
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
     
 def test_admin_sites_types_ranging():
     """Tests whether ranging in DataFrame returned by icl.get_admin_sites_types works properly."""
@@ -57,7 +57,7 @@ def test_admin_sites_types_ranging():
         # if there are indeed, it means it still ranges by "default index number" (i.e the default index numbers given to a DataFrame) and the test fails
         assert len(admin_sites_types["1":"5"].index) != 5
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
     
 def test_vaccine_general_summary_ranging():
     """Tests whether ranging in DataFrame returned by icl.get_vaccine_general_summary works properly."""
@@ -66,7 +66,7 @@ def test_vaccine_general_summary_ranging():
         # there should be 6 rows
         assert len(vaccine_summary["1":"5"].index) == 6
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
     
 def test_over_80_ranging():
     """Tests whether ranging in DataFrame returned by icl.get_over_80 works properly."""
@@ -75,7 +75,7 @@ def test_over_80_ranging():
         # there should be 4 rows
         assert len(over_80["1":"5"].index) == 4
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_prepare_for_plotting_on_map_incompatibilities():
     """Tests whether icl.prepare_for_plotting_on_map raises the proper error when given a non compatible DataFrame (i.e. one missing a "region" or "province" column)."""
@@ -85,9 +85,9 @@ def test_prepare_for_plotting_on_map_incompatibilities():
             # equip_contracts has no regional data
             icl.prepare_for_plotting_on_map(equip_contracts, on="region")
         except Exception as e:
-            assert isinstance(e, icl_b.ItaCovidLibKeyError)
+            assert isinstance(e, icl_e.ItaCovidLibKeyError)
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
 
 def test_prepare_for_plotting_on_map_incompatibilities_2():
     """Tests whether icl.prepare_for_plotting_on_map raises the proper error when given a compatible DataFrame but is asked to plot data on another kind of local subdivision (e.g. when asked to plot regional data on provinces)."""
@@ -97,9 +97,9 @@ def test_prepare_for_plotting_on_map_incompatibilities_2():
             # region_cases has no province data
             icl.prepare_for_plotting_on_map(region_cases, on="province")
         except Exception as e:
-            assert isinstance(e, icl_b.ItaCovidLibKeyError)
+            assert isinstance(e, icl_e.ItaCovidLibKeyError)
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_prepare_for_plotting_on_map_output_is_geodataframe():
     """Tests whether icl.prepare_for_plotting_on_map output is a GeoDataFrame."""
@@ -107,7 +107,7 @@ def test_prepare_for_plotting_on_map_output_is_geodataframe():
         region_cases_geodataframe = icl.prepare_for_plotting_on_map(source=icl.get_region_cases(), on="regions")
         assert isinstance(region_cases_geodataframe, geopandas.geodataframe.GeoDataFrame)
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_total_vaccinated_1():
     """Tests whether results returned by icl.tell_total_vaccinated with dose_number=1 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
@@ -118,7 +118,7 @@ def test_tell_total_vaccinated_1():
         vaccinated_third_group = icl.tell_total_vaccinated(1, start_date="2020-10-04")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_total_vaccinated_2():
     """Tests whether results returned by icl.tell_total_vaccinated with dose_number=2 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
@@ -129,7 +129,7 @@ def test_tell_total_vaccinated_2():
         vaccinated_third_group = icl.tell_total_vaccinated(2, start_date="2020-10-04")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_total_vaccinated_3():
     """Tests whether results returned by icl.tell_total_vaccinated with dose_number=3 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
@@ -140,7 +140,7 @@ def test_tell_total_vaccinated_3():
         vaccinated_third_group = icl.tell_total_vaccinated(3, start_date="2020-10-04")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
 
 def test_tell_manufacturer_delivered_doses_all():
     """Tests whether results returned by icl.tell_manufacturer_delivered_doses with manufacturer="all" and with ranging for date options make sense (i.e. the number of vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
@@ -152,7 +152,7 @@ def test_tell_manufacturer_delivered_doses_all():
         delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
         assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_manufacturer_delivered_doses_pfizer():
     """Tests whether results returned by icl.tell_manufacturer_delivered_doses with manufacturer="Pfizer/BioNTech" and with ranging for date options make sense (i.e. the number of vaccinated individuals with the given vaccine is equal to the sum of the number of vaccinated individuals with the given vaccine in three periods into which the whole vaccination timeline is divided)."""
@@ -164,7 +164,7 @@ def test_tell_manufacturer_delivered_doses_pfizer():
         delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
         assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_manufacturer_delivered_doses_moderna():
     """Tests whether results returned by icl.tell_manufacturer_delivered_doses with manufacturer="Moderna" and with ranging for date options make sense (i.e. the number of vaccinated individuals with the given vaccine is equal to the sum of the number of vaccinated individuals with the given vaccine in three periods into which the whole vaccination timeline is divided)."""
@@ -176,7 +176,7 @@ def test_tell_manufacturer_delivered_doses_moderna():
         delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
         assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_manufacturer_delivered_doses_astrazeneca():
     """Tests whether results returned by icl.tell_manufacturer_delivered_doses with manufacturer="Vaxzevria (AstraZeneca)" and with ranging for date options make sense (i.e. the number of vaccinated individuals with the given vaccine is equal to the sum of the number of vaccinated individuals with the given vaccine in three periods into which the whole vaccination timeline is divided)."""
@@ -188,7 +188,7 @@ def test_tell_manufacturer_delivered_doses_astrazeneca():
         delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
         assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_manufacturer_delivered_doses_janssen():
     """Tests whether results returned by icl.tell_manufacturer_delivered_doses with manufacturer="Janssen" and with ranging for date options make sense (i.e. the number of vaccinated individuals with the given vaccine is equal to the sum of the number of vaccinated individuals with the given vaccine in three periods into which the whole vaccination timeline is divided)."""
@@ -200,4 +200,4 @@ def test_tell_manufacturer_delivered_doses_janssen():
         delivered_third_group = icl.tell_manufacturer_delivered_doses(manufacturer, start_date="2020-10-04")
         assert total_delivered_ever == delivered_first_group+delivered_second_group+delivered_third_group
     except Exception as e:
-        assert isinstance(e, icl_b.ItaCovidLibConnectionError)
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
