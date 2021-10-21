@@ -27,7 +27,7 @@ def get_vaccine_ages():
     
     DataFrame Columns
     -----------------
-    age_group : str
+    age_group : str (index)
         Age groups
     total : int64
         Total of administered vaccines
@@ -74,12 +74,12 @@ def get_vaccine_deliveries():
     
     DataFrame Columns
     -----------------
+    date_of_delivery : datetime (index)
+        Date of delivery
     region_code : str
         Code of delivery region
     manufacturer : str
         Vaccine manufacturer name
-    date_of_delivery : datetime
-        Date of delivery
     number_of_doses : int64
         Number of delivered doses on date date_of_delivery
     NUTS1_code : str
@@ -121,12 +121,12 @@ def get_eligible():
     
     DataFrame Columns
     -----------------
+    age_group : str (index)
+        Age group
     region_code : str
         Region code
     region : str
         Official region name
-    age_group : str
-        Age group
     population : int64
         Total population per given age group
         
@@ -160,7 +160,7 @@ def get_extra_dose_eligible():
         
     DataFrame Columns
     -----------------
-    region_code : str
+    region_code : str (index)
         Region code
     region : str
         Official region name
@@ -200,6 +200,8 @@ def get_admin_sites():
     
     DataFrame Columns
     -----------------
+    ISTAT_region_code : str (index)
+        ISTAT region code
     region_code : str
         Region code
     province : str
@@ -212,8 +214,6 @@ def get_admin_sites():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int64
-        ISTAT region code
     region : str
         Official region name"""
     
@@ -248,6 +248,8 @@ def get_admin_sites_types():
     
     DataFrame Columns
     -----------------
+    ISTAT_region_code : str (index)
+        ISTAT region code
     region_code : str
         Region code
     place : str
@@ -258,8 +260,6 @@ def get_admin_sites_types():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int64
-        ISTAT region code
     region : str
         Official region name"""
     
@@ -294,7 +294,7 @@ def get_vaccine_admin():
     
     DataFrame Columns
     -----------------
-    date : datetime
+    date : datetime (index)
         Date of administration
     Manufacturer : str
         Vaccine manufacturer name
@@ -355,7 +355,7 @@ def get_vaccine_admin_summary():
     
     DataFrame Columns
     -----------------
-    date : datetime
+    date : datetime (index)
         Date of administration
     region_code : str
         Region code
@@ -414,6 +414,8 @@ def get_vaccine_general_summary():
     
     DataFrame Columns
     -----------------
+    ISTAT_region_code : str (index)
+        ISTAT region code
     region_code : str
         Region code
     administered_doses : int64
@@ -428,8 +430,6 @@ def get_vaccine_general_summary():
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
         European classification of territorial units NUTS: level NUTS2
-    ISTAT_region_code : int64
-        ISTAT region code
     region : str
         Official region name
     
@@ -473,7 +473,7 @@ def get_national_trend(latest=False):
     
     DataFrame Columns
     -----------------
-    date : datetime
+    date : datetime (index)
         Date
     country : str
         Country
@@ -558,6 +558,8 @@ def get_equip_contracts():
     
     DataFrame Columns
     -----------------
+    negotiation_date : datetime (index)
+        Date of negotiation
     manufacturer : str
         Equipment manufacturer name
     country : str
@@ -576,8 +578,6 @@ def get_equip_contracts():
         Equipment name
     negotiation_protocol : str
         Name of negotiation protocol
-    negotiation_date : datetime
-        Date of negotiation
     negotiation_file : str
         Negotiation file link
     errata : str
@@ -614,7 +614,7 @@ def get_equip_contracts():
     data = icl_b._get("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-contratti-dpc-forniture/dpc-covid19-dati-contratti-dpc-forniture.csv")
     if data is not None:
         # column names must be translated from Italian
-        data.rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"cig_type","cig":"cig","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"}, inplace=True)
+        data.rename(columns={"fornitore":"manufacturer","stato_fornitore":"country","gruppo_articoli":"product_group","sottogruppo_articoli":"article_subgroup","categoria":"category","sottocategoria":"subcategory","tipologia_fornitura":"equipment_kind","fornitura":"equipment","protocollo_atto_negoziale":"negotiation_protocol","data_atto_negoziale":"negotiation_date","file_atto_negoziale":"negotiation_file","integrazione_rettifica":"errata","protocollo_integrazione_rettifica":"errata_protocol","data_integrazione_rettifica":"errata_date","file_integrazione_rettifica":"errata_file","tipologia_cig":"tender_id_type","cig":"tender_id","quantita":"quantity","prezzo_unitario":"unit_price","totale_articolo":"total_price","stato_contratto":"agreement_state","ceduti_commissario_straordinario":"ceded","note":"notes","data_aggiornamento":"update_date"}, inplace=True)
         # dates in column negotiation_date must be parsed into datetime objects
         data["negotiation_date"] = pd.to_datetime(data["negotiation_date"])
         # dates in column update_date must be parsed into datetime objects
@@ -643,7 +643,7 @@ def get_equip_contracts_payments():
     
     DataFrame Columns
     -----------------
-    negotiation_protocol : str
+    negotiation_protocol : str (index)
         Name of negotiation protocol
     total_equipment : float64
         Total amount per given equipment
@@ -695,7 +695,7 @@ def get_province_cases(latest=False):
     
     DataFrame Columns
     -----------------
-    date : datetime
+    date : datetime (index)
         Date
     country : str
         Country
@@ -761,7 +761,7 @@ def get_region_cases(latest=False):
     
     DataFrame Columns
     -----------------
-    date : datetime
+    date : datetime (index)
         Date
     country : str
         Country
@@ -857,7 +857,7 @@ def get_over_80():
     
     DataFrame Columns
     -----------------
-    region_code : int64
+    region_code : str (index)
         Region code number
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -911,7 +911,7 @@ def get_istat_region_data(index="region_code"):
     
     DataFrame Columns
     -----------------
-    region_code : int64
+    region_code : str (index with "r"/"region"/"region_code" option for index parameter)
         Region code number
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
@@ -927,7 +927,7 @@ def get_istat_region_data(index="region_code"):
         Latitude
     long : float64
         Longitude
-    age_range : str
+    age_range : str (index with "a"/"age"/"age_range" option for index parameter)
         Age range
     males : int64
         Number of male individuals
@@ -1255,6 +1255,8 @@ def tell_rt():
     
     DataFrame Columns
     -----------------
+    date : datetime (index)
+        Date
     cases : float64
         Number of new cases on given date
     R_mean : float64
@@ -1273,6 +1275,9 @@ def tell_rt():
     get_national_trend : returns cases and the general situation of the epidemic in Italy over time"""
     # cases per day are returned by get_national_trend
     trend = get_national_trend()
-    # covid19.r_covid requires dates without hours, minutes and seconds
+    # covid19.r_covid, the function calculating Rt index, requires dates without hours, minutes and seconds
     trend.index = trend.index.date
-    return covid19.r_covid(trend["new_cases"])
+    rt_data = covid19.r_covid(trend["new_cases"])
+    # index column must be given a name
+    rt_data.index.name = "date"
+    return rt_data
