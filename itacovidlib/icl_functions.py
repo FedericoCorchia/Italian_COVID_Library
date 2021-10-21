@@ -619,6 +619,8 @@ def get_equip_contracts():
         data["negotiation_date"] = pd.to_datetime(data["negotiation_date"])
         # dates in column update_date must be parsed into datetime objects
         data["update_date"] = pd.to_datetime(data["update_date"])
+        # for proper indexing
+        data.sort_values(by="negotiation_date", inplace=True)
         data.set_index("negotiation_date", inplace=True)
         return data
 
