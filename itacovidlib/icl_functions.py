@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import epyestim.covid19 as covid19
-import datetime
 
 
 def get_vaccine_ages():
@@ -1194,7 +1193,7 @@ def prepare_for_plotting_on_map(source, on):
     else:
         raise icl_b.ItaCovidLibArgumentError("invalid option on. Please see documentation for help on possible options.")
 
-def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
+def plot_on_map(source, on, column, title="", legend=True, cmap="Reds"):
     """Plots data on a map of Italy with regions or provinces, depending on the option "on" specified.
     
     Parameters
@@ -1210,7 +1209,7 @@ def plot_on_map(source, on, column, title="", legend=True, cmap="viridis"):
     legend : bool
         Displays or not a legend (default is True)
     cmap : str
-        Code name of the color palette for plotting (for the list of codes please see matplotlib.org/stable/tutorials/colors/colormaps)(default is "viridis")
+        Code name of the color palette for plotting (for the list of codes please see matplotlib.org/stable/tutorials/colors/colormaps)(default is "Reds")
     
     Raises
     ------ 
