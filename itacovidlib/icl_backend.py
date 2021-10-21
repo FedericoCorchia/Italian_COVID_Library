@@ -3,9 +3,15 @@ import requests
 import io
 
 # errors are shown as clearly coming from Italian COVID Library to distinguish them from the ones raised by other libraries.
-class ItaCovidLibConnectionError(requests.exceptions.ConnectionError): pass
-class ItaCovidLibArgumentError(Exception): pass
-class ItaCovidLibKeyError(KeyError): pass
+class ItaCovidLibConnectionError(requests.exceptions.ConnectionError):
+    """Raised when a connection error occurs (e.g. because of lack of Internet connection) in an Italian COVID Library function"""
+    pass
+class ItaCovidLibArgumentError(Exception):
+    """Raised when improper arguments (of the requested type, but not among the acceptable ones) are passed to an Italian COVID Library function"""
+    pass
+class ItaCovidLibKeyError(KeyError):
+    """Raised when missing of a key with a determinate name in a DataFrame prevents an Italian COVID Library function from working"""
+    pass
 
 def _get(url):
     """Returns a DataFrame from the .csv file at which the URL provided as a parameter points, properly parsing it. Meant to be invoked by get_<resource_name> functions.
