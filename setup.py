@@ -11,9 +11,14 @@ setup(
     version='0.1.0'
     description='Python library for COVID-19 infections and vaccinations in Italy data retrieval and analysis',
     author='Federico Corchia'
-    license='',
+    license='MIT',
     keywords='COVID-19 infection vaccination Italy'
     url='https://github.com/FedericoCorchia/Italian_COVID_Library'
     long_description=read('README.md')
     install_requires=['numpy', 'pandas', 'geopandas', 'requests', 'epyestim'],
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Topic :: Utilities',
+        'License :: MIT License',
+        ],
 )
