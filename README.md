@@ -1,15 +1,15 @@
-# Italian_COVID_Library
+# Italian COVID Library (itacovidlib)
 ![Italian COVID Library logo](https://github.com/FedericoCorchia/Italian_COVID_Library/blob/main/logo.png)
 
 A Python library for COVID-19 infections and vaccinations in Italy data retrieval and analysis.
 
-## Installing Italian_COVID_Library
+## Installing Italian COVID Library
 Simply clone this repository and use it as a normal Python package:
 
-`git clone https://github.com/FedericoCorchia/Italian_COVID_Library`
+`git clone https://github.com/FedericoCorchia/itacovidlib`
 
 ## Requirements
-Functioning of Italian_COVID_Library requires the following:
+Functioning of Italian COVID Library requires the following:
 - Python (3.8.1 or higher)
 - numpy
 - pandas (1.2.0 or higher)
@@ -18,12 +18,12 @@ Functioning of Italian_COVID_Library requires the following:
 - epyestim
 - setuptools
 
-After cloning the repository, you may directly implement all of the above with the following command, which creates a specific Conda environment for Italian_COVID_Library with all dependencies, downloading them if needed:
+After cloning the repository, you may directly implement all of the above with the following command, which creates a specific Conda environment for Italian COVID Library with all dependencies, downloading them if needed:
 
 `conda env create -f itacovidlib_env.yml`
 
 ## Usage
-Instructions on using Italian_COVID_Library, also including practical examples:
+Instructions on using Italian COVID Library, also including practical examples:
 
 [Italian COVID Library Tutorial](https://github.com/FedericoCorchia/Italian_COVID_Library/blob/main/Tutorial.ipynb)
 
