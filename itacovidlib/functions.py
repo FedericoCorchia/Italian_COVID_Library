@@ -170,9 +170,50 @@ def get_extra_dose_eligible():
     
     See Also
     --------
-    get_eligible: data about eligible persons for COVID-19 vaccine administration in Italy."""
+    get_eligible : data about eligible persons for COVID-19 vaccine administration in Italy.
+    get_booster_dose_eligible : data about eligible persons for booster dose."""
         
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea-dose-aggiuntiva.csv")
+    if data is not None:
+        # column names must be translated from Italian
+        data.rename(columns={"area":"region_code","nome_area":"region","categoria_prevalente":"prevailing_category","totale_popolazione":"population"}, inplace=True)
+        data.set_index("region_code", inplace=True)
+        return data
+    
+def get_booster_dose_eligible():
+    """Returns DataFrame about eligible persons for booster COVID-19 vaccine dose administration in Italy.
+    
+    Parameters
+    ----------
+    None
+    
+    Raises
+    ------
+    ItaCovidLibConnectionError
+        Raised when there are issues with Internet connection.
+        
+    Returns
+    -------
+    pandas.core.frame.DataFrame
+        Pandas DataFrame with requested data.
+        
+    DataFrame Columns
+    -----------------
+    region_code : str (index)
+        Region code
+    region : str
+        Official region name
+    prevailing_category : str
+        Prevailing category of the vaccination group in the corresponding row
+    population : int64
+        Total population per given vaccination group (i.e. row)
+    
+    See Also
+    --------
+    get_eligible : data about eligible persons for COVID-19 vaccine administration in Italy.
+    get_extra_dose_eligible : data about eligible persons for extra dose."""
+        
+    data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/platea-dose-booster.csv")
     if data is not None:
         # column names must be translated from Italian
         data.rename(columns={"area":"region_code","nome_area":"region","categoria_prevalente":"prevailing_category","totale_popolazione":"population"}, inplace=True)
