@@ -1,7 +1,6 @@
-import sys
-sys.path.append("../itacovidlib")
-import itacovidlib.icl_backend as icl_b
-import itacovidlib.icl_exceptions as icl_e
+import os.path
+import itacovidlib.backend as icl_b
+import itacovidlib.exceptions as icl_e
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -1173,7 +1172,7 @@ def prepare_for_plotting_on_map(source, on):
     plot_on_map : plots directly the DataFrame given as an argument on a map with Italian regions or provinces. Use this function to instantly have the plot, with the possibility of basic customization. Use prepare_for_plotting_on_map if you need the full customization and editing potential of GeoPandas."""
     if on=="region" or on=="regions" or on=="r":
         # file contains Italian regions with their borders
-        italy_with_subdivisions = gpd.read_file("./regions_map.geojson")
+        italy_with_subdivisions = gpd.read_file(str(os.path.join(os.path.dirname(__file__), "regions_map.geojson")))
         try:
             # in this way, input DataFrame includes regional borders
             source_with_geometry = gpd.GeoDataFrame(pd.merge(source, italy_with_subdivisions, on="region", how="inner"))
@@ -1182,7 +1181,7 @@ def prepare_for_plotting_on_map(source, on):
             raise icl_e.ItaCovidLibKeyError("could not convert source object into GeoDataFrame with regions.") from None
     elif on=="province" or on=="provinces" or on=="p":
         # file contains Italian provinces with their borders
-        italy_with_subdivisions = gpd.read_file("./provinces_map.geojson")
+        italy_with_subdivisions = gpd.read_file(str(os.path.join(os.path.dirname(__file__), "provinces_map.geojson")))
         # the following solves an issue with Sardinian provinces, which are not optimally described by the provinces file
         italy_with_subdivisions = italy_with_subdivisions.dissolve(by="province")
         try:

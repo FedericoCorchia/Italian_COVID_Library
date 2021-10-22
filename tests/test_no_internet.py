@@ -1,6 +1,4 @@
-import sys
-sys.path.append("../itacovidlib")
-import itacovidlib.icl_backend as icl_b, itacovidlib.icl_functions as icl, itacovidlib.icl_exceptions as icl_e
+import itacovidlib.backend as icl_b, itacovidlib.functions as icl, itacovidlib.exceptions as icl_e
 
 ################################################################################################
 # NOTE ON TESTING

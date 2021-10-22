@@ -1,9 +1,7 @@
 import pandas as pd
 import requests
 import io
-import sys
-sys.path.append("../itacovidlib")
-import itacovidlib.icl_exceptions as icl_e
+import itacovidlib.exceptions as icl_e
 
 
 def _get(url):
