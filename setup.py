@@ -8,7 +8,7 @@ def read(file_name):
 setup(
     name='itacovidlib',
     packages=find_packages(),
-    version='0.1.0',
+    version='0.1.1',
     description='Python library for COVID-19 infections and vaccinations in Italy data retrieval and analysis',
     author='Federico Corchia',
     license='MIT',
