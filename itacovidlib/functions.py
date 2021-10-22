@@ -42,13 +42,15 @@ def get_vaccine_ages():
         Number of vaccine administrations to individuals infected between 3 and 6 months before, as such completing the vaccination cycle with a single dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
+    booster_dose : int64
+        Number of booster doses administered to individuals requiring it
     last_update : datetime
         Date of last update"""
     
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/anagrafica-vaccini-summary-latest.csv")
     if data is not None:
         # column names must be translated from Italian
-        data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","ultimo_aggiornamento":"last_update"}, inplace=True)
+        data.rename(columns={"fascia_anagrafica":"age_group","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","dose_booster":"booster_dose","ultimo_aggiornamento":"last_update"}, inplace=True)
         # dates in last_update must be parsed into datetime objects
         data["last_update"] = pd.to_datetime(data["last_update"])
         data.set_index("age_group", inplace=True)
@@ -142,6 +144,7 @@ def get_eligible():
     
 def get_extra_dose_eligible():
     """Returns DataFrame about eligible persons for extra COVID-19 vaccine dose administration in Italy.
+    An extra dose is required for those individuals who cannot develop a proper protection after the usual vaccine administration(s).
     
     Parameters
     ----------
@@ -182,6 +185,7 @@ def get_extra_dose_eligible():
     
 def get_booster_dose_eligible():
     """Returns DataFrame about eligible persons for booster COVID-19 vaccine dose administration in Italy.
+    A booster dose is required for those individuals who have successfully developed a proper protection after the usual vaccine administration(s) but are considered in need of one extra dose to furtherly reinforce their protection.
     
     Parameters
     ----------
@@ -354,6 +358,8 @@ def get_vaccine_admin():
         Number of vaccine administrations to individuals who have already been infected by SARS-CoV-2 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
+    booster_dose : int64
+        Number of booster doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
@@ -370,7 +376,7 @@ def get_vaccine_admin():
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv")
     if data is not None:
         # column names must be translated from Italian
-        data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        data.rename(columns={"data_somministrazione":"date","fornitore":"manufacturer","area":"region_code","fascia_anagrafica":"age_group","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","dose_booster":"booster_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
         # dates in column date must be parsed into datetime objects
         data["date"] = pd.to_datetime(data["date"])
         data.set_index("date", inplace=True)
@@ -413,6 +419,8 @@ def get_vaccine_admin_summary():
         Number of vaccine administrations to individuals who have already been infected by SARS-CoV-2 between 3 and 6 months before and as such completing the vaccination cycle with just one dose
     extra_dose : int64
         Number of extra doses administered to individuals requiring it
+    booster_dose : int64
+        Number of booster doses administered to individuals requiring it
     NUTS1_code : str
         European classification of territorial units NUTS: level NUTS1
     NUTS2_code : str
@@ -429,7 +437,7 @@ def get_vaccine_admin_summary():
     data = icl_b._get("https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-summary-latest.csv")
     if data is not None:
         # column names must be translated from Italian
-        data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
+        data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","dose_booster":"booster_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
         # dates in column date must be parsed into datetime objects
         data["date"] = pd.to_datetime(data["date"])
         data.set_index("date", inplace=True)
