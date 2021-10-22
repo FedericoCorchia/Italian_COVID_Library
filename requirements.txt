@@ -1,7 +1,0 @@
-numpy
-pandas
-geopandas
-requests
-epyestim
-setuptools
-hypothesis
