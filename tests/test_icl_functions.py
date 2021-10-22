@@ -108,34 +108,45 @@ def test_prepare_for_plotting_on_map_output_is_geodataframe():
         assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_total_vaccinated_1():
-    """Tests whether results returned by icl.tell_total_vaccinated with dose_number=1 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
+    """Tests whether results returned by icl.tell_total_vaccinated with dose="1" and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
     try:
-        total_vaccinated_ever = icl.tell_total_vaccinated(1)
-        vaccinated_first_group = icl.tell_total_vaccinated(1, stop_date="2020-10-01")
-        vaccinated_second_group = icl.tell_total_vaccinated(1, start_date="2020-10-02", stop_date="2020-10-03")
-        vaccinated_third_group = icl.tell_total_vaccinated(1, start_date="2020-10-04")
+        total_vaccinated_ever = icl.tell_total_vaccinated("1")
+        vaccinated_first_group = icl.tell_total_vaccinated("1", stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated("1", start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated("1", start_date="2020-10-04")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
         assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
 def test_tell_total_vaccinated_2():
-    """Tests whether results returned by icl.tell_total_vaccinated with dose_number=2 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
+    """Tests whether results returned by icl.tell_total_vaccinated with dose="2" and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
     try:
-        total_vaccinated_ever = icl.tell_total_vaccinated(2)
-        vaccinated_first_group = icl.tell_total_vaccinated(2, stop_date="2020-10-01")
-        vaccinated_second_group = icl.tell_total_vaccinated(2, start_date="2020-10-02", stop_date="2020-10-03")
-        vaccinated_third_group = icl.tell_total_vaccinated(2, start_date="2020-10-04")
+        total_vaccinated_ever = icl.tell_total_vaccinated("2")
+        vaccinated_first_group = icl.tell_total_vaccinated("2", stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated("2", start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated("2", start_date="2020-10-04")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
         assert isinstance(e, icl_e.ItaCovidLibConnectionError)
         
-def test_tell_total_vaccinated_3():
-    """Tests whether results returned by icl.tell_total_vaccinated with dose_number=3 and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
+def test_tell_total_vaccinated_extra():
+    """Tests whether results returned by icl.tell_total_vaccinated with dose="extra" and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
     try:
-        total_vaccinated_ever = icl.tell_total_vaccinated(3)
-        vaccinated_first_group = icl.tell_total_vaccinated(3, stop_date="2020-10-01")
-        vaccinated_second_group = icl.tell_total_vaccinated(3, start_date="2020-10-02", stop_date="2020-10-03")
-        vaccinated_third_group = icl.tell_total_vaccinated(3, start_date="2020-10-04")
+        total_vaccinated_ever = icl.tell_total_vaccinated("extra")
+        vaccinated_first_group = icl.tell_total_vaccinated("extra", stop_date="2020-10-01")
+        vaccinated_second_group = icl.tell_total_vaccinated("extra", start_date="2020-10-02", stop_date="2020-10-03")
+        vaccinated_third_group = icl.tell_total_vaccinated("extra", start_date="2020-10-04")
+        assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
+    except Exception as e:
+        assert isinstance(e, icl_e.ItaCovidLibConnectionError)
+        
+def test_tell_total_vaccinated_booster():
+    """Tests whether results returned by icl.tell_total_vaccinated with dose="booster" and with ranging for date options make sense (i.e. the number of total vaccinated individuals is equal to the sum of the number of vaccinated individuals in three periods into which the whole vaccination timeline is divided)."""
+    try:
+        total_vaccinated_ever = icl.tell_total_vaccinated("booster")
+        vaccinated_first_group = icl.tell_total_vaccinated("booster", stop_date="2020-10-20")
+        vaccinated_second_group = icl.tell_total_vaccinated("booster", start_date="2020-10-21", stop_date="2020-10-22")
+        vaccinated_third_group = icl.tell_total_vaccinated("booster", start_date="2020-10-23")
         assert total_vaccinated_ever == vaccinated_first_group+vaccinated_second_group+vaccinated_third_group
     except Exception as e:
         assert isinstance(e, icl_e.ItaCovidLibConnectionError)
