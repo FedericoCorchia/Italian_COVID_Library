@@ -440,6 +440,8 @@ def get_vaccine_admin_summary():
         data.rename(columns={"data_somministrazione":"date","area":"region_code","totale":"total","sesso_maschile":"males","sesso_femminile":"females","prima_dose":"first_dose","seconda_dose":"second_dose","pregressa_infezione":"previously_infected","dose_aggiuntiva":"extra_dose","dose_booster":"booster_dose","codice_NUTS1":"NUTS1_code","codice_NUTS2":"NUTS2_code","codice_regione_ISTAT":"ISTAT_region_code","nome_area":"region"}, inplace=True)
         # dates in column date must be parsed into datetime objects
         data["date"] = pd.to_datetime(data["date"])
+        # for proper indexing
+        data.sort_values(by="date", inplace=True)
         data.set_index("date", inplace=True)
         return data
     
