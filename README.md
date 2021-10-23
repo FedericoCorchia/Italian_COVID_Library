@@ -4,7 +4,11 @@
 A Python library for COVID-19 infections and vaccinations in Italy data retrieval and analysis.
 
 ## Installing Italian COVID Library
-Simply clone this repository and use it as a normal Python package:
+You can install this library directly from PyPi:
+
+`pip install itacovidlib`
+
+You can also just clone this repository and use it as a normal Python package:
 
 `git clone https://github.com/FedericoCorchia/itacovidlib`
 
@@ -17,10 +21,6 @@ Functioning of Italian COVID Library requires the following:
 - requests
 - epyestim
 - setuptools
-
-After cloning the repository, you may directly implement all of the above with the following command, which creates a specific Conda environment for Italian COVID Library with all dependencies, downloading them if needed:
-
-`conda env create -f itacovidlib_env.yml`
 
 ## Usage
 Instructions on using Italian COVID Library, also including practical examples:
@@ -36,7 +36,7 @@ Both are released under **Creative Commons - Attribution 4.0 International (CC B
 
 For .geojson files with Italian regions and provinces: [datajournalism-it/regioni-con-trento-bolzano.geojson](https://gist.github.com/datajournalism-it/f1abb68e718b54f6a0fe) and [datajournalism-it/province.geojson](https://gist.github.com/datajournalism-it/212e7134625fbee6f9f7) by Datajournalism.it
 
-Downloader functions provide the original data as they are without any modification apart from translating them into English.
+Downloader functions provide the original data as they are without any modification apart from translating them into English and optimising their presentation.
 
 ## Further project details
 This is a programming project for the Software and Computing for Nuclear and Subnuclear Physics course, Master Course in Nuclear and Subnuclear Physics, University of Bologna.
