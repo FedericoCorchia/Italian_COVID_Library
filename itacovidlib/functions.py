@@ -1044,9 +1044,8 @@ def tell_total_vaccinated(dose, option="n", start_date="2020", stop_date="2030")
     Result is returned, depending on the str value provided as option:
     no option or option = "n" or "number": just returns the requested number (default option);
     option = "o" or "over12": returns the requested number as a fraction of the Italian population aged over 12;
-    option = "p" or "population": returns the requested number as a fraction of the whole Italian population.
-    
-    WARNING: function might take a while before returning!
+    option = "p" or "population": returns the requested number as a fraction of the whole Italian population;
+    option = "e" or "eligible": (ONLY FOR dose = "extra"/"e"/"booster"/"b") returns the requested number as a fraction of eligible individuals for extra or booster dose.
     
     Parameters
     ----------
@@ -1081,7 +1080,13 @@ def tell_total_vaccinated(dose, option="n", start_date="2020", stop_date="2030")
     --------
     get_vaccine_admin : full data about vaccine administration in Italy"""
 
-    if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p":
+    # checks on options are performed first, otherwise get_vaccine_admin might run uselessly
+    if option!="number" and option!="n" and option!="over12" and option!="o" and option!="population" and option!="p" and option!="eligible" and option!="e":
+        raise icl_e.ItaCovidLibArgumentError("invalid option for option. Please see documentation for help on possible options.")
+    elif dose!="1" and dose!="2" and dose!="extra" and dose!="e" and dose!="booster" and dose!="b":
+        raise icl_e.ItaCovidLibArgumentError("invalid option for dose. Please see documentation for help on possible options.")
+    # option "eligible" is not available with dose options "1" and "2"
+    elif (dose=="1" or dose=="2") and (option=="eligible" or option=="e"):
         raise icl_e.ItaCovidLibArgumentError("invalid option for option. Please see documentation for help on possible options.")
     else:
         # default parameters for start_date and stop_date are respectively "2020" and "2030": this since syntax necessarily requires such default arguments. "2020" covers everything since the beginning, while "2030" covers all future runs of this software (hoping the pandemic ends much earlier!).
@@ -1119,6 +1124,9 @@ def tell_total_vaccinated(dose, option="n", start_date="2020", stop_date="2030")
                 elif option=="population" or option=="p":
                     total_population = get_istat_region_data().sum()["total"]
                     return vaccinated/total_population
+                elif option=="eligible" or option=="e":
+                    total_eligible = get_extra_dose_eligible().sum()["population"]
+                    return vaccinated/total_eligible
             elif dose == "booster" or dose == "b":
                 vaccinated = vaccine_admin.sum()["booster_dose"]
                 if option=="number" or option=="n":
@@ -1129,9 +1137,9 @@ def tell_total_vaccinated(dose, option="n", start_date="2020", stop_date="2030")
                 elif option=="population" or option=="p":
                     total_population = get_istat_region_data().sum()["total"]
                     return vaccinated/total_population
-            else:
-                raise icl_e.ItaCovidLibArgumentError("invalid option for dose. Please see documentation for help on possible options.")
-
+                elif option=="eligible" or option=="e":
+                    total_eligible = get_booster_dose_eligible().sum()["population"]
+                    return vaccinated/total_eligible
 
 def tell_total_admin_points():
     """Returns the number of all vaccine administration points in Italy.
